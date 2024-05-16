@@ -32,6 +32,7 @@ import { PhoneInput } from "../ui/phone-input";
 import AddresInput from "../ui/addres-input";
 import { schemesRegistersExtended } from "@/utils/schemas";
 import { format } from "date-fns";
+import { ScrollArea } from "../ui/scroll-area";
 
 const formSchema: z.ZodType = schemesRegistersExtended;
 
@@ -53,6 +54,7 @@ export default function RegisterForm() {
     defaultValues: {
       fullname: "",
       type_gender: "",
+      status: "",
       age: "",
       phone: "",
       provinsi: "",
@@ -69,24 +71,20 @@ export default function RegisterForm() {
     setIsLoading(true);
     try {
       const formattedDate = format(new Date(), "yyyy-MM-dd HH:mm:ss");
+      const convertStringToInt = parseFloat(values.phone.replace("+", ""));
       const res = await axios.post("http://localhost:3000/api/auth/register", {
-        Nama_tamu: values.fullname,
-        Jenis_kelamin: values.type_gender,
-        Umur_tamu: values.age,
-        Email_tamu: values.email,
-        Nomer_telephone_tamu: values.phone,
-        Alamat_tamu:
-          values.provinsi +
-          " " +
-          values.kota +
-          " " +
-          values.kecamatan +
-          " " +
-          values.kelurahan,
-        Password: values.password,
-        Role_tamu: "guest",
-        Status_tamu: "active",
-        Pekerjaan: "Software Engineer",
+        namaTamu: values.fullname,
+        jenisKelamin: values.type_gender,
+        umurTamu: parseFloat(values.age),
+        emailTamu: values.email,
+        nomerTelephoneTamu: values.phone.replace("+", ""),
+        provinsi: values.provinsi,
+        kota: values.kota,
+        kecamatan: values.kecamatan,
+        kelurahan: values.kelurahan,
+        password: values.password,
+        statusTamu: "active",
+        pekerjaan: "Software Engineer",
       });
       toast({
         description: res.data.message,
@@ -199,52 +197,11 @@ export default function RegisterForm() {
     setKelurahan([]);
   }, [selectedProvinsiCode, selectedKotaCode, selectedKecamatanCode]);
 
-  // const handleNextStep = () => {
-  //   form.trigger();
-
-  //   if (formStep === 0) {
-  //     const isValidStep0 = [
-  //       'fullname','age', 'type_gender', 'phone'
-  //     ].every(field => !form.getFieldState(field).error);
-  //     if (isValidStep0) {
-  //       setFormStep(1);
-  //     } else {
-  //       toast({
-  //         title: "Failed",
-  //         description: "Please fill all required fields correctly.",
-  //         variant: "destructive",
-  //         duration: 2000,
-  //       });
-  //     }
-  //   } else if (formStep === 1) {
-  //     const isValidStep1 = [
-  //       'provinsi', 'kota', 'kecamatan', 'kelurahan'
-  //     ].every(field => !form.getFieldState(field).error);
-
-  //     if (isValidStep1) {
-  //       setFormStep(2);
-  //     } else {
-  //       toast({
-  //         title: "Failed",
-  //         description: "Please complete all address fields correctly.",
-  //         variant: "destructive",
-  //         duration: 2000,
-  //       });
-  //     }
-  //   }
-  // }
-
-  const stepFields = [
-    ["fullname", "age", "type_gender", "phone"],
-    ["provinsi", "kota", "kecamatan", "kelurahan"],
-    ["email", "password", "confirmPassword"],
-  ];
-
   const handleNextStep = async () => {
     const stepFields = [
-      ["fullname", "age", "type_gender", "phone"],
+      ["fullname", "age", "type_gender", "status"],
       ["provinsi", "kota", "kecamatan", "kelurahan"],
-      ["email", "password", "confirmPassword"],
+      ["email", "password", "confirmPassword", "status"],
     ];
     const isCurrentStepValid = await form.trigger(stepFields[formStep]);
 
@@ -265,7 +222,7 @@ export default function RegisterForm() {
     <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <div className="relative overflow-x-hidden">
+          <div className="relative h-full overflow-x-hidden">
             <motion.div
               className={cn("pb-1 px-1 space-y-2", {
                 // hidden: formStep == 1,
@@ -348,18 +305,24 @@ export default function RegisterForm() {
               />
               <FormField
                 control={form.control}
-                name="phone"
+                name="status"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col items-start">
-                    <FormLabel className="text-left">Nomor Telepon</FormLabel>
-                    <FormControl className="w-full">
-                      <PhoneInput
-                        placeholder="Nomor Telepon"
-                        {...field}
-                        international
-                        defaultCountry="ID"
-                      />
-                    </FormControl>
+                  <FormItem>
+                    <FormLabel>Status</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Status kawin" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="Kawin">Kawin</SelectItem>
+                        <SelectItem value="Belum Kawin">Belum Kawin</SelectItem>
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -521,6 +484,24 @@ export default function RegisterForm() {
               />
               <FormField
                 control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col items-start">
+                    <FormLabel className="text-left">Nomor Telepon</FormLabel>
+                    <FormControl className="w-full">
+                      <PhoneInput
+                        placeholder="Nomor Telepon"
+                        {...field}
+                        international
+                        defaultCountry="ID"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
                 name="password"
                 render={({ field }) => (
                   <FormItem>
@@ -582,13 +563,16 @@ export default function RegisterForm() {
             </Button>
             {isLoading ? (
               <Button className="mt-2" disabled>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                 Please wait
               </Button>
             ) : (
               <Button
                 type="submit"
-                className={cn(`mt-2 w-28 ${formStep == 1 || formStep == 0 ? "hidden" : ""}`, {})}
+                className={cn(
+                  `mt-2 w-28 ${formStep == 1 || formStep == 0 ? "hidden" : ""}`,
+                  {}
+                )}
               >
                 Register
               </Button>
