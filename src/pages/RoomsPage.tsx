@@ -13,31 +13,34 @@ import axios from "axios";
 import { useRoomStore } from "@/hooks/use-get-rooms";
 import { Check, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Datum, TypeRooms } from "@/types";
+import { Rooms, TypeRooms } from "@/types";
 import { CardHotel } from "@/components/card/cardHotel";
+import useSwr, { useSWRConfig } from "swr";
+import ErrorPage from "@/components/error/error-page";
 
 export default function RoomsPage() {
-  const [roomsData, setRoomsData] = useState<Datum[]>([]);
+  const { mutate } = useSWRConfig();
 
-  const getRoomsData = useCallback(async () => {
-    const res = await axios
-      .get("http://localhost:3000/api/rooms")
-      .then((res) => res.data)
-      .catch((err) => console.log(err));
-    setRoomsData(res.data);
-  }, [setRoomsData]);
+  const fetcher = async () => {
+    const response = await axios.get("http://localhost:3000/api/rooms");
+    return response.data.data;
+  };
 
-  useEffect(() => {
-    getRoomsData();
-  }, [getRoomsData]);
+  const reset = () => {
+    mutate("/rooms");
+  };
+
+  const { data, error, isLoading } = useSwr("/rooms", fetcher);
+  if (error) return <ErrorPage error={error} reset={reset} />;
+  if (isLoading) return <div>Loading...</div>;
   return (
     <div className="min-h-screen ">
       <Navbar />
       <main className="w-full p-6 lg:p-4 lg:px-8">
         <div className="grid grid-cols-4 gap-4">
-          {roomsData && roomsData.length > 0 ? (
-            roomsData?.map((room: Datum) => (
-              <CardHotel key={room.Nama_kamar} data={room} className="w-full" />
+          {data && data.length > 0 ? (
+            data.map((room: Rooms) => (
+              <CardHotel key={room.nomerKamar} data={room} className="w-full" />
             ))
           ) : (
             <p>No rooms found</p>
