@@ -6,13 +6,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Datum } from "@/types";
+import { Rooms } from "@/types";
 import { Star } from "lucide-react";
 import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
 
 interface CardHotelProps {
-  data: Datum;
+  data: Rooms;
   className?: string;
 }
 
@@ -25,7 +25,7 @@ export function CardHotel({ data, className }: CardHotelProps) {
             alt="Hotel Image"
             className="object-cover w-full h-56 transition-transform group-hover:scale-105"
             height={400}
-            src={data.Url_gambar}
+            src={data.images[0].url}
             style={{
               aspectRatio: "600/400",
               objectFit: "cover",
@@ -39,7 +39,7 @@ export function CardHotel({ data, className }: CardHotelProps) {
         </div>
         <CardContent className="p-4">
           <div className="flex items-center justify-between mb-1">
-            <span className="text-xl font-semibold">{data.Nama_kamar}</span>
+            <span className="text-xl font-semibold">{data.namaKamar}</span>
           </div>
           <div className="flex items-center mb-2">
             <StarIcon className="w-5 h-5 fill-primary" />
@@ -48,7 +48,7 @@ export function CardHotel({ data, className }: CardHotelProps) {
             <StarIcon className="w-5 h-5 fill-muted stroke-muted-foreground" />
             <StarIcon className="w-5 h-5 fill-muted stroke-muted-foreground" />
             <span className="ml-2 text-muted-foreground">
-              ({data.Rating_kamar})
+              ({data.ratingKamar})
             </span>
           </div>
           <p className="mb-4 text-muted-foreground line-clamp-2">
@@ -59,7 +59,7 @@ export function CardHotel({ data, className }: CardHotelProps) {
             <div className="flex items-center gap-x-1">
               <span className="text-base font-semibold">
                 {" "}
-                {data.Harga_kamar.toLocaleString("id-ID", {
+                {data.hargaKamar.toLocaleString("id-ID", {
                   style: "currency",
                   currency: "IDR",
                 })}
@@ -67,7 +67,9 @@ export function CardHotel({ data, className }: CardHotelProps) {
               <span className="text-base"> /night</span>
             </div>
           </div>
-          <Link to={`/rooms/${data.No_kamar}?name=${data.Nama_kamar}&type=${data.Type_kamar}`}>
+          <Link
+            to={`/rooms/${data.nomerKamar}?name=${data.namaKamar}&type=${data.typeKamar}`}
+          >
             <Button className="w-full mt-3">Lihat Detail</Button>
           </Link>
         </CardContent>
