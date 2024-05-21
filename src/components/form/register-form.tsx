@@ -83,7 +83,7 @@ export default function RegisterForm() {
         kecamatan: values.kecamatan,
         kelurahan: values.kelurahan,
         password: values.password,
-        statusTamu: "active",
+        statusTamu: values.status,
         pekerjaan: "Software Engineer",
       });
       toast({
@@ -157,28 +157,28 @@ export default function RegisterForm() {
 
   const handleProvinsi = useCallback(async () => {
     const response = await axios.get(
-      "http://localhost:3000/api/location/provinsi"
+      "http://localhost:3000/api/locations/provinces"
     );
     return response.data;
   }, []);
 
   const handleKabukota = useCallback(async () => {
     const response = await axios.get(
-      `http://localhost:3000/api/location/kabupaten/${selectedProvinsiCode}`
+      `http://localhost:3000/api/locations/districts/${selectedProvinsiCode}`
     );
     return response.data;
   }, [selectedProvinsiCode]);
 
   const handleKecamatan = useCallback(async () => {
     const response = await axios.get(
-      `http://localhost:3000/api/location/kecamatan/${selectedKotaCode}`
+      `http://localhost:3000/api/locations/subdistricts/${selectedKotaCode}`
     );
     return response.data;
   }, [selectedKotaCode]);
 
   const handleKelurahan = useCallback(async () => {
     const response = await axios.get(
-      `http://localhost:3000/api/location/kelurahan/${selectedKecamatanCode}`
+      `http://localhost:3000/api/locations/villages/${selectedKecamatanCode}`
     );
     return response.data;
   }, [selectedKecamatanCode]);
