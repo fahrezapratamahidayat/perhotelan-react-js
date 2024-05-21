@@ -66,6 +66,10 @@ module.exports = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "caret-blink": {
+          "0%,70%,100%": { opacity: "1" },
+          "20%,50%": { opacity: "0" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -73,5 +77,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), ],
+  plugins: [require("tailwindcss-animate"),],
 }
