@@ -17,6 +17,7 @@ import PaymentPage from "./pages/PaymentPage.tsx";
 import HomePage from "./pages/HomePage.tsx";
 
 axios.defaults.withCredentials = true;
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -31,37 +32,29 @@ const router = createBrowserRouter([
     element: <RegisterPage />,
   },
   {
-    path: "/create-room",
-    element: <CreateRoomPage />,
-  },
-  {
-    path: "/rooms",
+    path: "rooms",
     element: <RoomsPage />,
   },
   {
-    path: "/rooms/:id",
+    path: "rooms/:id",
     element: <DetailRoomPage />,
-    children: [
-      {
-        path: ":id/reserve",
-        element: <ReservasiFormPage />,
-        children: [
-          {
-            path: "payment",
-            element: <PaymentPage />,
-          },
-        ],
-      },
-    ],
+  },
+  {
+    path: "rooms/:id/reserve",
+    element: <ReservasiFormPage />,
+  },
+  {
+    path: "rooms/:id/reserve/payment",
+    element: <PaymentPage />,
   },
 ]);
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <AuthWrapper>
-      <RouterProvider router={router} />
+      <ThemeProvider>
+        <Toaster />
+        <RouterProvider router={router} />
+      </ThemeProvider>
     </AuthWrapper>
-    <ThemeProvider>
-      <Toaster />
-    </ThemeProvider>
   </React.StrictMode>
 );
