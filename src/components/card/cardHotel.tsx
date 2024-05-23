@@ -59,7 +59,7 @@ export function CardHotel({ data, className }: CardHotelProps) {
             <div className="flex items-center gap-x-1">
               <span className="text-base font-semibold">
                 {" "}
-                {data.hargaKamar.toLocaleString("id-ID", {
+                {(data.hargaKamar * (1 - data.diskonKamar / 100) + data.fasilitasKamar.hargaFasilitas).toLocaleString("id-ID", {
                   style: "currency",
                   currency: "IDR",
                 })}
