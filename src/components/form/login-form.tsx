@@ -131,19 +131,19 @@ export default function LoginForm() {
               <Checkbox id="terms" />
               <Label htmlFor="terms">Accept terms and conditions</Label>
             </div>
-            <Link className="ml-auto inline-block text-sm underline" href={"/password"}>
+            <Link className="inline-block ml-auto text-sm underline" href={"/password"}>
               Forgot Password?
             </Link>
           </div> */}
           <Link
-            className="ml-auto inline-block text-sm underline"
+            className="inline-block ml-auto text-sm underline"
             to={"/password"}
           >
             Forgot Password?
           </Link>
           {isLoading ? (
             <Button className="w-full" disabled>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
               Please wait
             </Button>
           ) : (
@@ -153,14 +153,14 @@ export default function LoginForm() {
           )}
         </form>
       </Form>
-      <div className="space-y-3 pt-4">
+      <div className="pt-4 space-y-3">
         <div className="flex items-center justify-center">
           <div className="w-full border"></div>
-          <span className="flex items-center font- px-5">Or</span>
+          <span className="flex items-center px-5 font-">Or</span>
           <div className="w-full border"></div>
         </div>
         <Button
-          className="w-full flex gap-2 items-center justify-center"
+          className="flex items-center justify-center w-full gap-2"
           variant="outline"
         >
           <svg
