@@ -175,11 +175,14 @@ export default function DetailRoomPage() {
                   <Heart />
                 </div>
                 <p className="mt-1 text-normal">
-                  {data.hargaKamar.toLocaleString("id-ID", {
+                  {(
+                    data.hargaKamar * (1 - data.diskonKamar / 100) +
+                    data.fasilitasKamar.hargaFasilitas
+                  ).toLocaleString("id-ID", {
                     style: "currency",
                     currency: "IDR",
-                  })}{" "}
-                  {data.hargaKamar >= 1000000 ? "jt" : "K"} /night
+                  })}
+                  <span className="text-muted-foreground">/night</span>
                 </p>
               </CardHeader>
               <CardContent>
