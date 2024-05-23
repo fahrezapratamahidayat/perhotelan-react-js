@@ -43,3 +43,31 @@ export const schemesRegistersExtended = z
     path: ["confirmPassword"],
     message: "Kata sandi tidak cocok",
   });
+
+export const schemasLoginExtended = z
+  .object({
+    email: z.string().email({
+      message: "Silakan masukkan email yang valid.",
+    }),
+    password: z.string().min(6, {
+      message: "Kata sandi harus setidaknya 6 karakter.",
+    }),
+  })
+
+export const schemasReserveExtended = z.object({
+  fullname: z.string().nonempty("Nama lengkap sesuai KTP diperlukan"),
+  email: z.string().email("Email tidak valid").nonempty("Email diperlukan"),
+  phone: z
+    .string()
+    .refine(isValidPhoneNumber, { message: "Nomor telepon tidak valid" }),
+  reservationFor: z.string().nonempty("Pilih untuk siapa anda memesan"),
+  requests: z.string().optional(),
+  checkInDate: z.date({
+    required_error: "A date of birth is required.",
+  }),
+  // checkOutDate: z.date({
+  //   required_error: "A date of birth is required.",
+  // }),
+  duration: z.string().min(1, "Durasi Menginap diperlukan"),
+  guests: z.string().min(1, "Jumlah Tamu diperlukan"),
+})
