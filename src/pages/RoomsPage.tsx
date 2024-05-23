@@ -1,19 +1,6 @@
 import Navbar from "@/components/navigation/navbar";
-import React, { useCallback, useEffect, useState } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import useUserStore from "@/hooks/use-session";
 import axios from "axios";
-import { useRoomStore } from "@/hooks/use-get-rooms";
-import { Check, MapPin } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Rooms, TypeRooms } from "@/types";
+import { Rooms } from "@/types";
 import { CardHotel } from "@/components/card/cardHotel";
 import useSwr, { useSWRConfig } from "swr";
 import ErrorPage from "@/components/error/error-page";
