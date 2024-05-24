@@ -1,41 +1,64 @@
+import { Resevasi, reservasiTypes } from "@/types";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { formatCurrency, formatPhoneNumber } from "@/utils/helpers";
+import { format, parseISO } from "date-fns";
 
-export const CardDataReservasion = () => {
+interface PaymentProps {
+  data: reservasiTypes;
+}
+export const CardDataReservasion = ({ data }: PaymentProps) => {
   return (
     <>
-      <div className="lg:flex flex-col pt-[5px] w-[350px] px-5 py-6 hidden">
-        <Card className="w-full max-w-md border-none bg-muted/40">
-          <CardHeader>
-            <CardTitle>Reservation Details</CardTitle>
+      <div className="lg:flex flex-col  w-[350px] hidden">
+        <Card className="w-full border-none bg-muted/40">
+          <CardHeader className="">
+            <CardTitle className="text-left">Reservation Details</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4">
             <div className="grid gap-1">
               <span className="text-sm text-muted-foreground ">
                 Reservation Number
               </span>
-              <span className="font-medium">12345</span>
+              <span className="font-medium">{data?.reservationId}</span>
             </div>
             <div className="grid gap-1">
-              <span className="text-sm text-muted-foreground ">Hotel Name</span>
-              <span className="font-medium">The Ritz-Carlton, New York</span>
+              <span className="text-sm text-muted-foreground ">Nama Kamar</span>
+              <span className="font-medium">{data?.kamar.namaKamar}</span>
             </div>
             <div className="grid gap-1">
               <span className="text-sm text-muted-foreground ">Hotel Type</span>
-              <span className="font-medium">Luxury Hotel</span>
+              <span className="font-medium">{data?.kamar.typeKamar}</span>
             </div>
             <div className="grid gap-1">
               <span className="text-sm text-muted-foreground ">
                 Check-in Date
               </span>
-              <div className="font-medium">June 15, 2023</div>
+              <div className="font-medium">
+                {data?.tanggalCheckIn
+                  ? format(parseISO(data.tanggalCheckIn), "LLL dd, y")
+                  : "Tanggal tidak tersedia"}
+              </div>
             </div>
             <div className="grid gap-1">
-              <span className="text-sm text-muted-foreground ">Guest Name</span>
-              <span className="font-medium">John Doe</span>
+              <span className="text-sm text-muted-foreground ">
+                Durasi Menginap
+              </span>
+              <span className="font-medium"> {data?.durasiMenginap}</span>
+            </div>
+            <div className="grid gap-1">
+              <span className="text-sm text-muted-foreground ">
+                Check-out Date
+              </span>
+              <span className="font-medium">
+                {" "}
+                {data?.tanggalCheckIn
+                  ? format(parseISO(data.tanggalCheckOut), "LLL dd, y")
+                  : "Tanggal tidak tersedia"}
+              </span>
             </div>
             <div className="grid gap-1">
               <span className="text-sm text-muted-foreground ">
@@ -44,18 +67,22 @@ export const CardDataReservasion = () => {
               <span className="font-medium">2 Adults, 1 Child</span>
             </div>
             <div className="grid gap-1 mt-5">
-              <span className="text-sm text-muted-foreground ">Guest</span>
-              <span className="font-medium">Fahreza Pratama Hidayat</span>
+              <span className="text-sm text-muted-foreground ">Nama Tamu</span>
+              <span className="font-medium">{data?.tamu.namaTamu}</span>
             </div>
             <div className="grid gap-1">
               <span className="text-sm text-muted-foreground ">Email</span>
-              <span className="font-medium">fahreza@gmail.com</span>
+              <span className="font-medium">{data?.tamu.emailTamu}</span>
             </div>
             <div className="grid gap-1">
               <span className="text-sm text-muted-foreground ">
                 Phone Number
               </span>
-              <span className="font-medium">+62 812 3456 7890</span>
+              <span className="font-medium">
+                {data?.tamu.nomerTelephoneTamu
+                  ? formatPhoneNumber(data.tamu.nomerTelephoneTamu)
+                  : ""}
+              </span>
             </div>
           </CardContent>
         </Card>
@@ -64,7 +91,7 @@ export const CardDataReservasion = () => {
   );
 };
 
-export const CardPaymentMethodDebit = () => {
+export const CardPaymentMethodDebit = ({ data }: PaymentProps) => {
   return (
     <div className="flex flex-col pt-[5px] ">
       <div className="flex items-center">
@@ -91,12 +118,18 @@ export const CardPaymentMethodDebit = () => {
         <div className="flex flex-col gap-2">
           <div className="flex justify-between">
             <p className="text-left">Harga</p>
-            <h2 className="text-base font-bold text-right">Rp. 1.000.000</h2>
+            <h2 className="text-base font-bold text-right">
+              Rp.{""}
+              {formatCurrency(data.Payment.jumlahBayar)}
+            </h2>
           </div>
         </div>
         <div className="flex justify-between">
           <p className="text-left">Total</p>
-          <h2 className="text-base font-bold text-right">Rp. 1.000.000</h2>
+          <h2 className="text-base font-bold text-right">
+            Rp.{""}
+            {formatCurrency(data.Payment.jumlahBayar)}
+          </h2>
         </div>
         <div className="flex self-end mt-2">
           <Button className="justify-end text-white bg-blue-500 hover:bg-blue-600">
@@ -108,7 +141,7 @@ export const CardPaymentMethodDebit = () => {
   );
 };
 
-export const CardPaymentMethodBank = () => {
+export const CardPaymentMethodBank = ({ data }: PaymentProps) => {
   return (
     <div className="flex flex-col pt-[5px] ">
       <div className="flex flex-col">
@@ -151,12 +184,20 @@ export const CardPaymentMethodBank = () => {
         <div className="flex flex-col gap-2">
           <div className="flex justify-between">
             <p className="text-left">Harga</p>
-            <h2 className="text-base font-bold text-right">Rp. 1.000.000</h2>
+            <h2 className="text-base font-bold text-right">
+              {" "}
+              Rp.{""}
+              {formatCurrency(data.Payment.jumlahBayar)}
+            </h2>
           </div>
         </div>
         <div className="flex justify-between">
           <p className="text-left">Total</p>
-          <h2 className="text-base font-bold text-right">Rp. 1.000.000</h2>
+          <h2 className="text-base font-bold text-right">
+            {" "}
+            Rp.{""}
+            {formatCurrency(data.Payment.jumlahBayar)}
+          </h2>
         </div>
         <div className="flex self-end mt-2 h-[54px]">
           <Button className="justify-end text-white bg-blue-500 hover:bg-blue-600">
@@ -168,7 +209,7 @@ export const CardPaymentMethodBank = () => {
   );
 };
 
-export const CardPaymentMethodATM = () => {
+export const CardPaymentMethodATM = ({ data }: PaymentProps) => {
   return (
     <div className="flex flex-col pt-[5px] ">
       <div className="flex flex-col">
@@ -211,12 +252,20 @@ export const CardPaymentMethodATM = () => {
         <div className="flex flex-col gap-2">
           <div className="flex justify-between">
             <p className="text-left">Harga</p>
-            <h2 className="text-base font-bold text-right">Rp. 1.000.000</h2>
+            <h2 className="text-base font-bold text-right">
+              {" "}
+              Rp.{""}
+              {formatCurrency(data.Payment.jumlahBayar)}
+            </h2>
           </div>
         </div>
         <div className="flex justify-between">
           <p className="text-left">Total</p>
-          <h2 className="text-base font-bold text-right">Rp. 1.000.000</h2>
+          <h2 className="text-base font-bold text-right">
+            {" "}
+            Rp.{""}
+            {formatCurrency(data.Payment.jumlahBayar)}
+          </h2>
         </div>
         <div className="flex self-end mt-2 h-[54px]">
           <Button className="justify-end text-white bg-blue-500 hover:bg-blue-600">
@@ -228,7 +277,7 @@ export const CardPaymentMethodATM = () => {
   );
 };
 
-export const CardPaymentMethodEwallet = () => {
+export const CardPaymentMethodEwallet = ({data} : PaymentProps) => {
   return (
     <div className="flex flex-col pt-[5px] w-[542px]">
       <div className="flex flex-col">
@@ -261,12 +310,20 @@ export const CardPaymentMethodEwallet = () => {
         <div className="flex flex-col gap-2">
           <div className="flex justify-between">
             <p className="text-left">Harga</p>
-            <h2 className="text-base font-bold text-right">Rp. 1.000.000</h2>
+            <h2 className="text-base font-bold text-right">
+              {" "}
+              Rp.{""}
+              {formatCurrency(data.Payment.jumlahBayar)}
+            </h2>
           </div>
         </div>
         <div className="flex justify-between">
           <p className="text-left">Total</p>
-          <h2 className="text-base font-bold text-right">Rp. 1.000.000</h2>
+          <h2 className="text-base font-bold text-right">
+            {" "}
+            Rp.{""}
+            {formatCurrency(data.Payment.jumlahBayar)}
+          </h2>
         </div>
         <div className="flex self-end mt-2 h-[54px]">
           <Button className="justify-end text-white bg-blue-500 hover:bg-blue-600">
@@ -277,9 +334,9 @@ export const CardPaymentMethodEwallet = () => {
     </div>
   );
 };
-export const CardPaymentMethodOTC = () => {
+export const CardPaymentMethodOTC = ({data}: PaymentProps) => {
   return (
-    <div className="flex flex-col pt-[5px] w-[542px]">
+    <div className="flex flex-col pt-[5px] lg:w-[542px]">
       <div className="flex flex-col">
         <h1 className="text-[2rem] font-black">Merchant OTC</h1>
       </div>
@@ -304,12 +361,20 @@ export const CardPaymentMethodOTC = () => {
         <div className="flex flex-col gap-2">
           <div className="flex justify-between">
             <p className="text-left">Harga</p>
-            <h2 className="text-base font-bold text-right">Rp. 1.000.000</h2>
+            <h2 className="text-base font-bold text-right">
+              {" "}
+              Rp.{""}
+              {formatCurrency(data.Payment.jumlahBayar)}
+            </h2>
           </div>
         </div>
         <div className="flex justify-between">
           <p className="text-left">Total</p>
-          <h2 className="text-base font-bold text-right">Rp. 1.000.000</h2>
+          <h2 className="text-base font-bold text-right">
+            {" "}
+            Rp.{""}
+            {formatCurrency(data.Payment.jumlahBayar)}
+          </h2>
         </div>
         <div className="flex self-end mt-2 h-[54px]">
           <Button className="justify-end text-white bg-blue-500 hover:bg-blue-600">
