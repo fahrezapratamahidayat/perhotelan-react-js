@@ -1,41 +1,22 @@
 import Navbar from "@/components/navigation/navbar";
 import { detailRoom } from "@/types";
 import axios from "axios";
-import {
-  Badge,
-  BathIcon,
-  CheckIcon,
-  FireExtinguisherIcon,
-  Flame,
-  Heart,
-  Share,
-  ShieldCheck,
-  Star,
-} from "lucide-react";
-import React, { SVGProps, useCallback, useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { FireExtinguisherIcon, Flame, Heart, ShieldCheck } from "lucide-react";
+import { SVGProps } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import useSWR, { useSWRConfig } from "swr";
 import { CardTitle, CardHeader, CardContent, Card } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import {
-  PopoverTrigger,
-  PopoverContent,
-  Popover,
-} from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  SelectValue,
-  SelectTrigger,
-  SelectItem,
-  SelectContent,
-  Select,
-} from "@/components/ui/select";
 import { FasilityRoomPremium } from "@/components/room/roomDetails";
 import { Separator } from "@/components/ui/separator";
+import useUserStore from "@/hooks/use-session";
+import { formatCurrency } from "@/utils/helpers";
 
 export default function DetailRoomPage() {
   const { id } = useParams();
+  const { mutate } = useSWRConfig();
+  const navigate = useNavigate();
+  const { userData } = useUserStore();
 
   const fetcher = async () => {
     const response = await axios.get(`http://localhost:3000/api/rooms/${id}`);
@@ -106,32 +87,6 @@ export default function DetailRoomPage() {
                 </div>
               </div>
             </div>
-            {/* <div className="grid gap-2">
-              <h2 className="text-2xl font-bold">Harga</h2>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="flex items-center gap-2">
-                  <CalendarIcon className="w-6 h-6" />
-                  <div>
-                    <div className="font-medium">Nightly Rate</div>
-                    <div className="text-gray-500 dark:text-gray-400">
-                      {data.hargaKamar.toLocaleString("id-ID", {
-                        style: "currency",
-                        currency: "IDR",
-                      })}
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <DiscIcon className="w-6 h-6" />
-                  <div>
-                    <div className="font-medium">Weekly Rate</div>
-                    <div className="text-gray-500 dark:text-gray-400">
-                      $2,499
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div> */}
             <div className="grid gap-2">
               <h2 className="text-2xl font-bold">Gallery</h2>
               <div className="grid grid-cols-2 gap-4">
@@ -156,7 +111,7 @@ export default function DetailRoomPage() {
                     <CardTitle>{data.namaKamar}</CardTitle>
                     <div className="flex items-center justify-center mt-1 ml-2">
                       <span className="mr-1 text-base text-muted-foreground">
-                        {data.ratingKamar}
+                        {data.ratingKamar}/5
                       </span>
                       <svg
                         width="15"
@@ -174,23 +129,40 @@ export default function DetailRoomPage() {
                   </div>
                   <Heart />
                 </div>
-                <p className="mt-1 text-normal">
-                  {(
-                    data.hargaKamar * (1 - data.diskonKamar / 100) +
-                    data.fasilitasKamar.hargaFasilitas
-                  ).toLocaleString("id-ID", {
-                    style: "currency",
-                    currency: "IDR",
-                  })}
-                  <span className="text-muted-foreground">/night</span>
-                </p>
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-normal font-semibold">Harga / Malam</h2>
+                    <span className="text-base text-muted-foreground">
+                      Rp.{" "}
+                      {formatCurrency(
+                        data.hargaKamar * (1 - data.diskonKamar / 100) +
+                          data.fasilitasKamar.hargaFasilitas
+                      )}{" "}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-normal font-semibold">Type Kamar</h2>
+                    <span className="text-base font-semibold text-muted-foreground">
+                      ({data.typeKamar})
+                    </span>
+                  </div>
+                </div>
               </CardHeader>
               <CardContent>
                 <Separator />
                 <div className="flex flex-col gap-4 mt-4">
-                  <Link to={`/rooms/${id}/reserve`}>
-                    <Button className="w-full">Reservation now</Button>
-                  </Link>
+                  <Button
+                    className="w-full"
+                    onClick={() => {
+                      if (userData) {
+                        navigate(`/rooms/${id}/reserve`);
+                      } else {
+                        alert("Please login first");
+                      }
+                    }}
+                  >
+                    Reservation now
+                  </Button>
                   <Button variant={"outline"}>Add to wishlist</Button>
                 </div>
               </CardContent>
