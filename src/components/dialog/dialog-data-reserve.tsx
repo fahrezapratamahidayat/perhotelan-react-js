@@ -6,14 +6,20 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { format } from "date-fns";
+import { addHours, format } from "date-fns";
 
 interface DataReserveProps {
-  data: any;
+  data: {
+    fullname: string;
+    email: string;
+    phone: string;
+    checkInDate: string;
+    checkOutDate: string;
+    duration: string;
+    guests: string;
+    requests: string;
+  };
   onClose: () => void;
   open: boolean;
   onConfirm: () => void;
@@ -26,7 +32,7 @@ export function DialogDataReserve({
   onConfirm,
   onCancel,
 }: DataReserveProps) {
-  console.log(data);
+  if(!open) return
   const formattedCheckInDate = format(
     new Date(data.checkInDate),
     "dd MMMM yyyy"
@@ -34,49 +40,50 @@ export function DialogDataReserve({
   function calculateCheckOutDate(checkInDate: Date, duration: number): Date {
     const checkOutDate = new Date(checkInDate);
     checkOutDate.setDate(checkInDate.getDate() + duration);
-    checkOutDate.setHours(11, 0, 0, 0); // Set waktu check-out pukul 11:00
+    checkOutDate.setHours(11, 0, 0, 0);
     return checkOutDate;
   }
   const checkOutDate = calculateCheckOutDate(
     new Date(data.checkInDate),
     parseInt(data.duration)
   );
+const paymentDeadline = addHours(new Date(data.checkInDate), -24);
+const formattedPaymentDeadline = format(paymentDeadline, "dd MMMM yyyy HH:mm");
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-md px-5 py-4 rounded-lg">
-        <DialogHeader>
+      <DialogContent className="max-w-lg px-5 py-4 rounded-lg">
+        <DialogHeader className="flex items-center">
           <DialogTitle>Detail Reservasi</DialogTitle>
           <DialogDescription>
-            Jika Data Data Reservasi Sudah Sesuai Silahkan Konfirmasi
+            Jika Data Reservasi Sudah Sesuai Silahkan Konfirmasi
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col gap-3">
-          <h2 className="text-xl font-bold tracking-tighter">Data Tamu</h2>
-          <div className="flex items-center justify-between gap-3 text-base font-semibold">
+          <div className="flex items-center justify-between gap-3 text-sm font-semibold">
             <span>Nama Lengkap</span>
             <span>{data.fullname}</span>
           </div>
-          <div className="flex items-center justify-between gap-3 text-base font-semibold">
+          <div className="flex items-center justify-between gap-3 text-sm font-semibold">
             <span>Email</span>
             <span>{data.email}</span>
           </div>
-          <div className="flex items-center justify-between gap-3 text-base font-semibold">
+          <div className="flex items-center justify-between gap-3 text-sm font-semibold">
             <span>Nomer Handphone</span>
             <span>{data.phone}</span>
           </div>
-          <div className="flex items-center justify-between gap-3 text-base font-semibold">
+          <div className="flex items-center justify-between gap-3 text-sm font-semibold">
             <span>Check in</span>
             <span>{formattedCheckInDate}</span>
           </div>
-          <div className="flex items-center justify-between gap-3 text-base font-semibold">
+          <div className="flex items-center justify-between gap-3 text-sm font-semibold">
             <span>Durasi Menginap</span>
             <span>{data.duration}</span>
           </div>
-          <div className="flex items-center justify-between gap-3 text-base font-semibold">
+          <div className="flex items-center justify-between gap-3 text-sm font-semibold">
             <span>Check out</span>
             <span>{format(checkOutDate, "dd MMMM yyyy")}</span>
           </div>
-          <div className="flex items-center justify-between gap-3 text-base font-semibold">
+          <div className="flex items-center justify-between gap-3 text-sm font-semibold">
             <span>Jumlah Tamu</span>
             <span>{data.guests}</span>
           </div>
@@ -89,6 +96,12 @@ export function DialogDataReserve({
             Batal
           </Button>
         </div>
+        <DialogFooter>
+          <p className="text-red-500">
+            Harap melakukan pembayaran sebelum tanggal{" "}
+            {formattedPaymentDeadline} untuk menghindari pembatalan reservasi.
+          </p>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
