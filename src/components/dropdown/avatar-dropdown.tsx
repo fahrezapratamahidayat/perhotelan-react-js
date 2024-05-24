@@ -12,10 +12,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Suspense } from "react";
 import useUserStore from "@/hooks/use-session";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 export function AvatarDropDown() {
   const { checkUserToken, signOut, userData } = useUserStore();
   const { login } = checkUserToken();
+  const location = useLocation();
 
   return (
     <DropdownMenu>
@@ -28,8 +29,8 @@ export function AvatarDropDown() {
       <DropdownMenuContent className="w-56 mt-2 mr-4">
         <DropdownMenuLabel className={`flex flex-col ${login ? "" : "hidden"}`}>
           <Suspense fallback={<div>Loading...</div>}>
-            <h3 className="text-sm font-medium">{userData?.name}</h3>
-            <p className="text-sm text-muted-foreground">{userData?.email}</p>
+            <h3 className="text-sm font-medium">{userData?.namaTamu}</h3>
+            <p className="text-sm text-muted-foreground">{userData?.emailTamu}</p>
           </Suspense>
         </DropdownMenuLabel>
         <DropdownMenuSeparator className={` ${login ? "" : "hidden"}`} />
@@ -66,7 +67,7 @@ export function AvatarDropDown() {
         </DropdownMenuItem>
         <DropdownMenuItem className={` ${login ? "hidden" : ""}`}>
           <Link2 className="w-4 h-4 mr-2" />
-          <Link to={"/auth/login"}>Login</Link>
+          <Link to={`/auth/login?callbackUrl=${location.pathname}`}>Login</Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
