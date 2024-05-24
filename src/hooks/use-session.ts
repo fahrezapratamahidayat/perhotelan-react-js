@@ -15,9 +15,9 @@ const useUserStore = create<UserState>((set, get) => ({
   userData: null,
   setUserData: (data) => set({ userData: data }),
   checkUserToken: () => {
-    const token = Cookies.get('token');
+    const token = Cookies.get('token') || localStorage.getItem('token'); // Mengambil token dari Cookies atau localStorage
     if (token) {
-      const decodedData = jwtDecode<userData>(token); // Gunakan generic untuk memastikan tipe decodedData
+      const decodedData = jwtDecode<userData>(token); // Decode token
       // Hanya update state jika data yang didecode berbeda dengan userData saat ini
       if (JSON.stringify(get().userData) !== JSON.stringify(decodedData)) {
         set({ userData: decodedData });
@@ -33,6 +33,7 @@ const useUserStore = create<UserState>((set, get) => ({
   },
   signOut: () => {
     Cookies.remove('token');
+    localStorage.removeItem('token'); // Menghapus token dari localStorage
     set({ userData: null });
   }
 }));
