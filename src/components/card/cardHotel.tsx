@@ -10,6 +10,7 @@ import { Rooms } from "@/types";
 import { Star } from "lucide-react";
 import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
+import { formatCurrency } from "@/utils/helpers";
 
 interface CardHotelProps {
   data: Rooms;
@@ -58,11 +59,11 @@ export function CardHotel({ data, className }: CardHotelProps) {
           <div className="flex flex-col">
             <div className="flex items-center gap-x-1">
               <span className="text-base font-semibold">
-                {" "}
-                {(data.hargaKamar * (1 - data.diskonKamar / 100) + data.fasilitasKamar.hargaFasilitas).toLocaleString("id-ID", {
-                  style: "currency",
-                  currency: "IDR",
-                })}
+                Rp. {""}
+                {formatCurrency(
+                  data.hargaKamar * (1 - data.diskonKamar / 100) +
+                    data.fasilitasKamar.hargaFasilitas
+                )}
               </span>
               <span className="text-base"> /night</span>
             </div>
