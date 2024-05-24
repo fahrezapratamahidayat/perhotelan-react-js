@@ -20,8 +20,8 @@ import axios from "axios";
 import { useToast } from "../ui/use-toast";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import jwt  from "jsonwebtoken";
 import useUserStore from "@/hooks/use-session";
+import { useLocation } from "react-router-dom";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -33,10 +33,14 @@ const formSchema = z.object({
 });
 
 export default function LoginForm() {
+  const location = useLocation();
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
   const setUserData = useUserStore((state) => state.setUserData);
+
+  const queryParams = new URLSearchParams(location.search);
+  const callbackUrl = queryParams.get("callbackUrl") || "/";
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -51,12 +55,16 @@ export default function LoginForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      const res = await axios.post("http://localhost:3000/api/auth/login", {
-        email: values.email,
-        password: values.password,
-      }, {
-        withCredentials: true
-      });
+      const res = await axios.post(
+        "http://localhost:3000/api/auth/login",
+        {
+          email: values.email,
+          password: values.password,
+        },
+        {
+          withCredentials: true,
+        }
+      );
       if (res.status === 200) {
         toast({
           title: "Login Success",
@@ -65,8 +73,9 @@ export default function LoginForm() {
         });
         const token = res.data.token;
         const decodedData = jwtDecode(token);
+        localStorage.setItem("token", token);
         setUserData(decodedData);
-        navigate("/");
+        navigate(callbackUrl);
       } else if (res.status === 400) {
         toast({
           title: "Login Failed",
