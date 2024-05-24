@@ -1,7 +1,6 @@
 import { schemasReserveExtended } from "@/utils/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -23,23 +22,16 @@ import { CalendarIcon } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { Calendar } from "@/components/ui/calendar";
 import { Separator } from "@/components/ui/separator";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import React, { useEffect } from "react";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
 import { z } from "zod";
 import { detailRoom } from "@/types";
 import axios from "axios";
 import useUserStore from "@/hooks/use-session";
 import { useToast } from "../ui/use-toast";
 import { DialogDataReserve } from "../dialog/dialog-data-reserve";
+import { formatCurrency } from "@/utils/helpers";
 const formSchema: z.ZodType = schemasReserveExtended;
 
 interface formProps {
@@ -50,7 +42,7 @@ export default function ReservationForm({ id, data }: formProps) {
   const [checkInDate, setCheckInDate] = React.useState<Date | undefined>();
   const [duration, setDuration] = React.useState<number>(1);
   const checkOutDate = checkInDate ? addDays(checkInDate, duration) : undefined;
-  const [openDialog,setOpenDialog] = React.useState<boolean>(false)
+  const [openDialog, setOpenDialog] = React.useState<boolean>(false);
   const { userData } = useUserStore();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -72,13 +64,13 @@ export default function ReservationForm({ id, data }: formProps) {
   function calculateCheckOutDate(checkInDate: Date, duration: number): Date {
     const checkOutDate = new Date(checkInDate);
     checkOutDate.setDate(checkInDate.getDate() + duration);
-    checkOutDate.setHours(11, 0, 0, 0); // Set waktu check-out pukul 11:00
+    checkOutDate.setHours(11, 0, 0, 0);
     return checkOutDate;
   }
 
-    const onSubmit = async (values: z.infer<typeof formSchema>) => {
-      setOpenDialog(true); // Buka dialog konfirmasi sebelum submit
-    };
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    setOpenDialog(true);
+  };
 
   async function confirmSubmit(values: z.infer<typeof formSchema>) {
     const checkInDate = new Date(values.checkInDate);
@@ -117,7 +109,7 @@ export default function ReservationForm({ id, data }: formProps) {
   const phoneWithoutCountryCode = fullPhone?.startsWith("62")
     ? fullPhone.substring(2)
     : fullPhone;
-    
+
   useEffect(() => {
     form.reset({
       fullname: userData?.namaTamu,
@@ -140,9 +132,9 @@ export default function ReservationForm({ id, data }: formProps) {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex justify-around mx-32 lg:flex-row md:py-24 lg:py-4 lg:p-4"
+          className="flex flex-col justify-around items-center lg:mx-32 lg:flex-row md:py-24 lg:py-4 lg:p-4 gap-5"
         >
-          <div className="w-full max-w-lg px-5 py-4 rounded-lg ">
+          <div className="w-full max-w-lg bg-muted/40 px-5 py-4 rounded-lg ">
             <div className="">
               <h2 className="text-2xl font-bold tracking-tighter">
                 Informasi Anda
@@ -253,7 +245,7 @@ export default function ReservationForm({ id, data }: formProps) {
               </div>
             </div>
           </div>
-          <div className="w-full max-w-md px-5 py-4 rounded-lg bg-muted/40">
+          <div className="w-full max-w-lg px-5 py-4 rounded-lg bg-muted/40">
             <div className="">
               <h2 className="text-2xl font-bold tracking-tighter">
                 Detail Reservasi Kamar
@@ -262,10 +254,19 @@ export default function ReservationForm({ id, data }: formProps) {
                 Silahkan isi detail reservasi kamar anda
               </p>
               <div className="flex flex-col mt-3">
-                <h2 className="text-xl font-medium tracking-tighter">
-                  Staycation Rooms
-                </h2>
-                <span>Rp. 200k/ malam</span>
+                <div className="flex items-center gap-2">
+                  <h2 className="text-xl font-medium tracking-tighter">
+                    Staycation Rooms
+                  </h2>
+                  <span className="text-base font-semibold text-muted-foreground">({data.typeKamar})</span>
+                </div>
+                <span className="text-base font-semibold">
+                  Rp. {" "}
+                  {formatCurrency(
+                    data.hargaKamar * (1 - data.diskonKamar / 100) +
+                      data.fasilitasKamar.hargaFasilitas
+                  )}
+                </span>
               </div>
               <div className="mt-6 space-y-2">
                 <FormField
@@ -298,6 +299,7 @@ export default function ReservationForm({ id, data }: formProps) {
                               initialFocus
                               mode="single"
                               selected={checkInDate}
+                              disabled={{ before: new Date() }}
                               onSelect={(date) => {
                                 setCheckInDate(date);
                                 field.onChange(date);
@@ -422,10 +424,12 @@ export default function ReservationForm({ id, data }: formProps) {
                         <span>Total</span>
                         <span>
                           Rp.{" "}
-                          {data.hargaKamar *
-                            duration *
-                            (1 - data.diskonKamar / 100) +
-                            data.fasilitasKamar.hargaFasilitas}
+                          {formatCurrency(
+                            data.hargaKamar *
+                              duration *
+                              (1 - data.diskonKamar / 100) +
+                              data.fasilitasKamar.hargaFasilitas
+                          )}
                         </span>
                       </div>
                     </div>
