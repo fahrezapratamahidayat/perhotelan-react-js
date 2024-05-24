@@ -13,10 +13,32 @@ import {
 } from "@/components/card/card-reservation";
 import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
+import useSWR, { useSWRConfig } from "swr";
+import axios from "axios";
+import { Resevasi, reservasiTypes } from "@/types";
+import { format, parseISO } from "date-fns";
+import { formatPhoneNumber } from "@/utils/helpers";
 
 export default function PaymentPage() {
   const [activeTab, setActiveTab] = useState<string>("");
+  const { mutate } = useSWRConfig();
+  const location = useLocation();
+  const query = new URLSearchParams(location.search);
+  const paymentId = query.get("paymentId");
+  const reservasionId = query.get("reservationId");
 
+  const fetcher = async () => {
+    const response = await axios.get(
+      `http://localhost:3000/api/reservation/${reservasionId}`
+    );
+    return response.data.data
+  };
+
+  const { data: dataReservasion } = useSWR<reservasiTypes>(
+    `/api/reservation/${reservasionId}`,
+    fetcher
+  );
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
   };
@@ -24,11 +46,10 @@ export default function PaymentPage() {
     hidden: { opacity: 0, y: 50 },
     visible: { opacity: 1, y: 0 },
   };
-
   return (
     <>
       <Navbar />
-      <main className="flex flex-col justify-around mx-8 lg:flex-row md:py-24 lg:py-4 lg:p-4">
+      <main className="flex flex-col lg:justify-between mx-8 lg:flex-row md:py-24 lg:py-2 lg:p-2">
         <AllPaymentMethod
           className="hidden lg:flex"
           tab={activeTab}
@@ -43,25 +64,57 @@ export default function PaymentPage() {
               <span className="text-sm text-muted-foreground ">
                 Reservation Number
               </span>
-              <span className="font-medium">12345</span>
+              <span className="font-medium">
+                {dataReservasion?.reservationId}
+              </span>
             </div>
             <div className="grid gap-1">
-              <span className="text-sm text-muted-foreground ">Hotel Name</span>
-              <span className="font-medium">The Ritz-Carlton, New York</span>
+              <span className="text-sm text-muted-foreground ">Nama Kamar</span>
+              <span className="font-medium">
+                {dataReservasion?.kamar.namaKamar}
+              </span>
             </div>
             <div className="grid gap-1">
               <span className="text-sm text-muted-foreground ">Hotel Type</span>
-              <span className="font-medium">Luxury Hotel</span>
+              <span className="font-medium">
+                {dataReservasion?.kamar.typeKamar}
+              </span>
             </div>
             <div className="grid gap-1">
               <span className="text-sm text-muted-foreground ">
                 Check-in Date
               </span>
-              <div className="font-medium">June 15, 2023</div>
+              <div className="font-medium">
+                {dataReservasion?.tanggalCheckIn
+                  ? format(
+                      parseISO(dataReservasion.tanggalCheckIn),
+                      "LLL dd, y"
+                    )
+                  : "Tanggal tidak tersedia"}
+              </div>
             </div>
             <div className="grid gap-1">
-              <span className="text-sm text-muted-foreground ">Guest Name</span>
-              <span className="font-medium">John Doe</span>
+              <span className="text-sm text-muted-foreground ">
+                Durasi Menginap
+              </span>
+              <span className="font-medium">
+                {" "}
+                {dataReservasion?.durasiMenginap}
+              </span>
+            </div>
+            <div className="grid gap-1">
+              <span className="text-sm text-muted-foreground ">
+                Check-out Date
+              </span>
+              <span className="font-medium">
+                {" "}
+                {dataReservasion?.tanggalCheckIn
+                  ? format(
+                      parseISO(dataReservasion.tanggalCheckOut),
+                      "LLL dd, y"
+                    )
+                  : "Tanggal tidak tersedia"}
+              </span>
             </div>
             <div className="grid gap-1">
               <span className="text-sm text-muted-foreground ">
@@ -70,18 +123,26 @@ export default function PaymentPage() {
               <span className="font-medium">2 Adults, 1 Child</span>
             </div>
             <div className="grid gap-1 mt-5">
-              <span className="text-sm text-muted-foreground ">Guest</span>
-              <span className="font-medium">Fahreza Pratama Hidayat</span>
+              <span className="text-sm text-muted-foreground ">Nama Tamu</span>
+              <span className="font-medium">
+                {dataReservasion?.tamu.namaTamu}
+              </span>
             </div>
             <div className="grid gap-1">
               <span className="text-sm text-muted-foreground ">Email</span>
-              <span className="font-medium">fahreza@gmail.com</span>
+              <span className="font-medium">
+                {dataReservasion?.tamu.emailTamu}
+              </span>
             </div>
             <div className="grid gap-1">
               <span className="text-sm text-muted-foreground ">
                 Phone Number
               </span>
-              <span className="font-medium">+62 812 3456 7890</span>
+              <span className="font-medium">
+                {dataReservasion?.tamu.nomerTelephoneTamu
+                  ? formatPhoneNumber(dataReservasion.tamu.nomerTelephoneTamu)
+                  : ""}
+              </span>
             </div>
           </CardContent>
         </Card>
@@ -112,7 +173,9 @@ export default function PaymentPage() {
                   variants={variants}
                   transition={{ duration: 0.5 }}
                 >
-                  <CardPaymentMethodDebit />
+                  <CardPaymentMethodDebit
+                    data={dataReservasion as reservasiTypes}
+                  />
                 </motion.div>
               )}
             </div>
@@ -132,7 +195,9 @@ export default function PaymentPage() {
                   variants={variants}
                   transition={{ duration: 0.5 }}
                 >
-                  <CardPaymentMethodBank />
+                  <CardPaymentMethodBank
+                    data={dataReservasion as reservasiTypes}
+                  />
                 </motion.div>
               )}
             </div>
@@ -152,7 +217,9 @@ export default function PaymentPage() {
                   variants={variants}
                   transition={{ duration: 0.5 }}
                 >
-                  <CardPaymentMethodATM />
+                  <CardPaymentMethodATM
+                    data={dataReservasion as reservasiTypes}
+                  />
                 </motion.div>
               )}
             </div>
@@ -172,7 +239,9 @@ export default function PaymentPage() {
                   variants={variants}
                   transition={{ duration: 0.5 }}
                 >
-                  <CardPaymentMethodOTC />
+                  <CardPaymentMethodOTC
+                    data={dataReservasion as reservasiTypes}
+                  />
                 </motion.div>
               )}
             </div>
@@ -192,13 +261,13 @@ export default function PaymentPage() {
                   variants={variants}
                   transition={{ duration: 0.5 }}
                 >
-                  <CardPaymentMethodEwallet />
+                  <CardPaymentMethodEwallet data={dataReservasion as reservasiTypes} />
                 </motion.div>
               )}
             </div>
           </div>
         </div>
-        <CardDataReservasion />
+        <CardDataReservasion data={dataReservasion as reservasiTypes} />
       </main>
     </>
   );
