@@ -6,10 +6,15 @@ import { Label } from "../ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { formatCurrency, formatPhoneNumber } from "@/utils/helpers";
 import { format, parseISO } from "date-fns";
+import { id } from "date-fns/locale";
+import axios from "axios";
+import { useToast } from "../ui/use-toast";
+import { useNavigate } from "react-router-dom";
 
 interface PaymentProps {
   data: reservasiTypes;
 }
+
 export const CardDataReservasion = ({ data }: PaymentProps) => {
   return (
     <>
@@ -39,7 +44,9 @@ export const CardDataReservasion = ({ data }: PaymentProps) => {
               </span>
               <div className="font-medium">
                 {data?.tanggalCheckIn
-                  ? format(parseISO(data.tanggalCheckIn), "LLL dd, y")
+                  ? format(parseISO(data.tanggalCheckIn), "LLL dd, y", {
+                      locale: id,
+                    })
                   : "Tanggal tidak tersedia"}
               </div>
             </div>
@@ -92,6 +99,39 @@ export const CardDataReservasion = ({ data }: PaymentProps) => {
 };
 
 export const CardPaymentMethodDebit = ({ data }: PaymentProps) => {
+  const { toast } = useToast();
+  const navigate = useNavigate()
+  const handlePayment = async (payment: reservasiTypes, metodePembayaran: string) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api//confirm-payment",
+        {
+          paymentId: payment.Payment.paymentId,
+          amount: 936000,
+          metodePembayaran,
+        }
+      );
+      if (response.data.status === 200) {
+        toast({
+          title: "Success",
+          description: response.data.message,
+        });
+        navigate("/reservations");
+      } else {
+        toast({
+          title: "Something went wrong",
+          description: response.data.message,
+          variant: "destructive",
+        });
+      }
+    } catch (error: any) {
+      toast({
+        title: "Something went wrong",
+        description: error.response.data.message,
+        variant: "destructive",
+      });
+    }
+  };
   return (
     <div className="flex flex-col pt-[5px] ">
       <div className="flex items-center">
@@ -132,7 +172,12 @@ export const CardPaymentMethodDebit = ({ data }: PaymentProps) => {
           </h2>
         </div>
         <div className="flex self-end mt-2">
-          <Button className="justify-end text-white bg-blue-500 hover:bg-blue-600">
+          <Button
+            className="justify-end text-white bg-blue-500 hover:bg-blue-600"
+            onClick={() => {
+              data && handlePayment(data, "Kartu Kredit/Debit");
+            }}
+          >
             Bayar Sekarang
           </Button>
         </div>
@@ -277,7 +322,7 @@ export const CardPaymentMethodATM = ({ data }: PaymentProps) => {
   );
 };
 
-export const CardPaymentMethodEwallet = ({data} : PaymentProps) => {
+export const CardPaymentMethodEwallet = ({ data }: PaymentProps) => {
   return (
     <div className="flex flex-col pt-[5px] w-[542px]">
       <div className="flex flex-col">
@@ -334,7 +379,7 @@ export const CardPaymentMethodEwallet = ({data} : PaymentProps) => {
     </div>
   );
 };
-export const CardPaymentMethodOTC = ({data}: PaymentProps) => {
+export const CardPaymentMethodOTC = ({ data }: PaymentProps) => {
   return (
     <div className="flex flex-col pt-[5px] lg:w-[542px]">
       <div className="flex flex-col">
