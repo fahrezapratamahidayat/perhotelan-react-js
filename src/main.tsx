@@ -15,6 +15,7 @@ import DetailRoomPage from "./pages/DetailRoomPage.tsx";
 import ReservasiFormPage from "./pages/ReservasiFormPage.tsx";
 import PaymentPage from "./pages/PaymentPage.tsx";
 import HomePage from "./pages/HomePage.tsx";
+import ReservationsPage from "./pages/ReservationsPage.tsx";
 
 axios.defaults.withCredentials = true;
 
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
     path: "rooms/:id/reserve/payment",
     element: <PaymentPage />,
   },
+  {
+    path: "reservations",
+    element: <ReservationsPage />,
+  }
 ]);
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
