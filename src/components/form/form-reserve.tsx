@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/select";
 import { PhoneInput } from "@/components/ui/phone-input";
 import { Textarea } from "@/components/ui/textarea";
-import { addDays, format } from "date-fns";
+import { addDays, addHours, format } from "date-fns";
 import {
   Popover,
   PopoverContent,
@@ -76,6 +76,11 @@ export default function ReservationForm({ id, data }: formProps) {
     const checkInDate = new Date(values.checkInDate);
     const duration = parseInt(values.duration);
     const checkOutDate = calculateCheckOutDate(checkInDate, duration);
+    const paymentDeadline = addHours(new Date(values.checkInDate), -24);
+    const formattedPaymentDeadline = format(
+      paymentDeadline,
+      "dd MMMM yyyy HH:mm"
+    );
     try {
       const respone = await axios.post(
         "http://localhost:3000/api/reservation",
@@ -90,7 +95,7 @@ export default function ReservationForm({ id, data }: formProps) {
       if (respone.data.status === 200) {
         toast({
           title: "Success",
-          description: "Reservation Success",
+          description: `Reservation Success, Payment Deadline at ${formattedPaymentDeadline}`,
         });
         navigate(
           `/rooms/${id}/reserve/payment?reservationId=${respone.data.data.reservationId}&paymentId=${respone.data.data.paymentId}`
@@ -132,9 +137,9 @@ export default function ReservationForm({ id, data }: formProps) {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col justify-around items-center lg:mx-32 lg:flex-row md:py-24 lg:py-4 lg:p-4 gap-5"
+          className="flex flex-col items-center justify-around gap-5 lg:mx-32 lg:flex-row md:py-24 lg:py-4 lg:p-4"
         >
-          <div className="w-full max-w-lg bg-muted/40 px-5 py-4 rounded-lg ">
+          <div className="w-full max-w-lg px-5 py-4 rounded-lg bg-muted/40 ">
             <div className="">
               <h2 className="text-2xl font-bold tracking-tighter">
                 Informasi Anda
@@ -258,10 +263,12 @@ export default function ReservationForm({ id, data }: formProps) {
                   <h2 className="text-xl font-medium tracking-tighter">
                     Staycation Rooms
                   </h2>
-                  <span className="text-base font-semibold text-muted-foreground">({data.typeKamar})</span>
+                  <span className="text-base font-semibold text-muted-foreground">
+                    ({data.typeKamar})
+                  </span>
                 </div>
                 <span className="text-base font-semibold">
-                  Rp. {" "}
+                  Rp.{" "}
                   {formatCurrency(
                     data.hargaKamar * (1 - data.diskonKamar / 100) +
                       data.fasilitasKamar.hargaFasilitas
