@@ -13,15 +13,15 @@ import {
 } from "@/components/card/card-reservation";
 import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import useSWR, { useSWRConfig } from "swr";
 import axios from "axios";
-import { Resevasi, reservasiTypes } from "@/types";
+import { reservasiTypes } from "@/types";
 import { format, parseISO } from "date-fns";
 import { formatPhoneNumber } from "@/utils/helpers";
 
 export default function PaymentPage() {
-  const [activeTab, setActiveTab] = useState<string>("");
+  const [activeTab, setActiveTab] = useState<string>("creditCard");
   const { mutate } = useSWRConfig();
   const location = useLocation();
   const query = new URLSearchParams(location.search);
@@ -35,10 +35,12 @@ export default function PaymentPage() {
     return response.data.data
   };
 
-  const { data: dataReservasion } = useSWR<reservasiTypes>(
+  const { data: dataReservasion, error, isLoading } = useSWR<reservasiTypes>(
     `/api/reservation/${reservasionId}`,
     fetcher
   );
+  if(isLoading) return <div>Loading...</div>
+  if(error) return <div>Error</div>
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
   };
@@ -49,7 +51,7 @@ export default function PaymentPage() {
   return (
     <>
       <Navbar />
-      <main className="flex flex-col lg:justify-between mx-8 lg:flex-row md:py-24 lg:py-2 lg:p-2">
+      <main className="flex flex-col mx-8 lg:justify-between lg:flex-row md:py-24 lg:py-2 lg:p-2">
         <AllPaymentMethod
           className="hidden lg:flex"
           tab={activeTab}
