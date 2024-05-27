@@ -8,7 +8,6 @@ import axios from "axios";
 import { Toaster } from "./components/ui/toaster.tsx";
 import RegisterPage from "./pages/RegisterPage.tsx";
 import { ThemeProvider } from "./components/providers/theme-provider.tsx";
-import CreateRoomPage from "./pages/CreateRoomPage.tsx";
 import { AuthWrapper } from "./hooks/session-provider.tsx";
 import RoomsPage from "./pages/RoomsPage.tsx";
 import DetailRoomPage from "./pages/DetailRoomPage.tsx";
@@ -16,6 +15,8 @@ import ReservasiFormPage from "./pages/ReservasiFormPage.tsx";
 import PaymentPage from "./pages/PaymentPage.tsx";
 import HomePage from "./pages/HomePage.tsx";
 import ReservationsPage from "./pages/ReservationsPage.tsx";
+import { DashBoardRoomsPage } from "./pages/DasboardRoomsAdmin.tsx";
+import CreateRoomPage from "./pages/CreateRoomPage.tsx";
 
 axios.defaults.withCredentials = true;
 
@@ -51,7 +52,15 @@ const router = createBrowserRouter([
   {
     path: "reservations",
     element: <ReservationsPage />,
-  }
+  },
+  {
+    path: "admin/rooms",
+    element: <DashBoardRoomsPage />,
+  },
+  {
+    path: "admin/rooms/create",
+    element: <CreateRoomPage />,
+  },
 ]);
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
