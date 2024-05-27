@@ -2,6 +2,7 @@ import { reservasiTypes } from "@/types";
 import { formatCurrency, formatDate } from "@/utils/helpers";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
+import { Calendar, Clock, User2 } from "lucide-react";
 
 interface ReservationsListProps {
   data: reservasiTypes;
@@ -18,7 +19,7 @@ export default function ReservationsList({
   const isOverdue = batasWaktuBayar.getDate() > hariIni.getDate();
   return (
     <>
-      <div className="flex flex-col justify-start gap-5 mx-10 mb-10 lg:items-center lg:flex-row">
+      <div className="flex flex-col justify-start gap-5 p-4 mb-10 rounded-lg lg:mx-10 lg:items-center lg:flex-row ">
         <div className="w-full h-64 lg:w-72 lg:h-44 md:w-full md:h-80 sm:w-full sm:h-72">
           <img
             src={`${data.kamar.images[0].url}`}
@@ -28,7 +29,6 @@ export default function ReservationsList({
         </div>
         <div className="flex flex-col">
           <div className="flex items-center gap-1">
-            <h1 className="text-xl font-semibold">{index + 1}.</h1>
             <div className="flex items-center gap-1">
               <h1 className="text-xl font-bold">{data.kamar.namaKamar}</h1>
               <span className="text-sm font-medium text-muted-foreground">
@@ -37,6 +37,7 @@ export default function ReservationsList({
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <Calendar className="w-4 h-4" />
             <span>Check in: </span>
             <span className="text-sm font-medium text-muted-foreground">
               {formatDate(data.tanggalCheckIn, "LLL dd, y")}
@@ -47,15 +48,23 @@ export default function ReservationsList({
             </span>
           </div>
           <div className="flex items-center gap-2">
+            <Clock className="w-4 h-4" />
             <span>Durasi Menginap: </span>
             <span className="text-sm font-medium text-muted-foreground">
               {data.durasiMenginap} malam
             </span>
           </div>
           <div className="flex items-center gap-2">
+            <User2 className="w-4 h-4" />
             <span>Jumlah Tamu: </span>
             <span className="text-sm font-medium text-muted-foreground">
               3 orang
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span>Total Pembayaran: </span>
+            <span className="text-sm font-medium text-muted-foreground">
+              Rp. {formatCurrency(data.Payment.jumlahBayar)}
             </span>
           </div>
           <div className="flex items-center gap-2">
@@ -79,8 +88,7 @@ export default function ReservationsList({
           <div className="flex flex-col items-center gap-1 mt-3 lg:hidden">
             {data.Payment.statusPembayaran === "lunas" && !isOverdue ? (
               <Button
-                className="w-full"
-                variant={"outline"}
+                className="w-full text-white bg-success hover:bg-success/50"
                 onClick={() => navigate(`/reservations/${data.reservationId}`)}
               >
                 Lihat Pesanan
@@ -106,8 +114,7 @@ export default function ReservationsList({
         <div className="flex-col hidden gap-3 lg:my-auto lg:ml-auto lg:flex">
           {data.Payment.statusPembayaran === "lunas" && !isOverdue ? (
             <Button
-              className="w-full"
-              variant={"outline"}
+              className="w-full text-white bg-success hover:bg-success/50"
               onClick={() => navigate(`/reservations/${data.reservationId}`)}
             >
               Lihat Pesanan
@@ -115,7 +122,6 @@ export default function ReservationsList({
           ) : (
             <Button
               className="w-full"
-              variant={"outline"}
               onClick={() =>
                 navigate(
                   `/rooms/${data.noKamar}/reserve/payment?reservationId=${data.reservationId}&paymentId=${data.noPayment}`
