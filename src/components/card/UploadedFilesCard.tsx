@@ -1,4 +1,3 @@
-import type { UploadedFile } from "@/types"
 
 import {
   Card,
@@ -10,11 +9,7 @@ import {
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { EmptyCard } from "@/components/card/empty-card"
 
-interface UploadedFilesCardProps {
-  uploadedFiles: UploadedFile[]
-}
-
-export function UploadedFilesCard({ uploadedFiles }: UploadedFilesCardProps) {
+export function UploadedFilesCard({ uploadedFiles }: any) {
   return (
     <Card>
       <CardHeader>
@@ -25,14 +20,14 @@ export function UploadedFilesCard({ uploadedFiles }: UploadedFilesCardProps) {
         {uploadedFiles.length > 0 ? (
           <ScrollArea className="pb-4">
             <div className="flex w-max space-x-2.5">
-              {uploadedFiles.map((file) => (
-                <div key={file.key} className="relative aspect-video w-64">
+              {uploadedFiles.map((file: any) => (
+                <div key={file.key} className="relative w-64 aspect-video">
                   <img
                     src={file.url}
                     alt={file.name}
                     sizes="(min-width: 640px) 640px, 100vw"
                     loading="lazy"
-                    className="rounded-md object-cover"
+                    className="object-cover rounded-md"
                   />
                 </div>
               ))}
