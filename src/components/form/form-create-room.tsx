@@ -36,6 +36,7 @@ import { schemasCreateRoom } from "@/utils/schemas";
 import axios from "axios";
 import { toast } from "sonner";
 import { useToast } from "../ui/use-toast";
+import { Navigate, useNavigate } from "react-router-dom";
 
 export function FormCreateRoom() {
   const [files, setFiles] = useState<File[]>([]);
@@ -47,7 +48,7 @@ export function FormCreateRoom() {
       descriptionKamar: "",
       ukuranKamar: "",
       typeKamar: undefined,
-      diskonKamar: undefined,
+      diskonKamar: "",
       namaFasilitas: "",
       deskripsiFasilitas: "",
       typeFasilitas: undefined,
@@ -55,14 +56,16 @@ export function FormCreateRoom() {
       images: [],
     },
   });
-
+  const navigate = useNavigate();
  async function onSubmit(values: z.infer<typeof schemasCreateRoom>) {
    const formData = new FormData();
    formData.append("namaKamar", values.namaKamar);
    formData.append("ukuranKamar", values.ukuranKamar);
    formData.append("deskripsiKamar", values.descriptionKamar);
    formData.append("typeKamar", values.typeKamar);
-   formData.append("diskonKamar", values.diskonKamar || "0");
+    if (values.diskonKamar !== undefined) {
+      formData.append("diskonKamar", values.diskonKamar.toString());
+    }
    formData.append("namaFasilitas", values.namaFasilitas);
    formData.append("deskripsiFasilitas", values.deskripsiFasilitas);
    formData.append("typeFasilitas", values.typeFasilitas);
@@ -82,6 +85,8 @@ export function FormCreateRoom() {
          title: "Success",
          description: "Kamar dan fasilitas berhasil dibuat",
        })
+       form.reset();
+       navigate("/admin/rooms")
      } else {
        toast({
          title: "Something went wrong",
