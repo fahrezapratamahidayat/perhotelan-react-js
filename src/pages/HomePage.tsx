@@ -5,11 +5,10 @@ import useUserStore from "../hooks/use-session";
 import { Link, redirect, useNavigate } from "react-router-dom";
 import { SparklesCore } from "../components/ui/sparkles";
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
+import useCheckSession from "@/hooks/session-provider";
 
 export default function HomePage() {
-  const navigate = useNavigate();
-  const { userData, setUserData, checkUserToken, signOut } = useUserStore();
-
+ useCheckSession();
   return (
     <div className="min-h-screen bg-black">
       <Navbar />
