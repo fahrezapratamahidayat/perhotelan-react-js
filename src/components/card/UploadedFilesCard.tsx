@@ -13,8 +13,10 @@ export function UploadedFilesCard({ uploadedFiles }: any) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Uploaded files</CardTitle>
-        <CardDescription>View the uploaded files here</CardDescription>
+        <CardTitle>Galeri</CardTitle>
+        <CardDescription>
+          Lihat berkas yang telah diunggah di sini
+        </CardDescription>
       </CardHeader>
       <CardContent>
         {uploadedFiles.length > 0 ? (
@@ -43,5 +45,5 @@ export function UploadedFilesCard({ uploadedFiles }: any) {
         )}
       </CardContent>
     </Card>
-  )
+  );
 }
