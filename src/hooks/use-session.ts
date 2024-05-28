@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import { jwtDecode } from 'jwt-decode';
 import Cookies from 'js-cookie';
-import { useEffect } from 'react';
 import { userData } from '@/types';
 
 interface UserState {
@@ -15,16 +14,25 @@ const useUserStore = create<UserState>((set, get) => ({
   userData: null,
   setUserData: (data) => set({ userData: data }),
   checkUserToken: () => {
-    const token = Cookies.get('token') || localStorage.getItem('token'); // Mengambil token dari Cookies atau localStorage
+    const token = Cookies.get('token') || localStorage.getItem('token');
     if (token) {
-      const decodedData = jwtDecode<userData>(token); // Decode token
-      // Hanya update state jika data yang didecode berbeda dengan userData saat ini
-      if (JSON.stringify(get().userData) !== JSON.stringify(decodedData)) {
-        set({ userData: decodedData });
+      try {
+        const decodedData = jwtDecode<userData>(token);
+        const currentTime = Date.now() / 1000; 
+        if (decodedData.exp < currentTime) {
+          get().signOut();
+          Cookies.remove('refreshToken');
+          return { login: false };
+        }
+        if (JSON.stringify(get().userData) !== JSON.stringify(decodedData)) {
+          set({ userData: decodedData });
+        }
+        return { login: true };
+      } catch (error) {
+        get().signOut();
+        return { login: false };
       }
-      return { login: true };
     } else {
-      // Hanya clear userData jika saat ini tidak null
       if (get().userData !== null) {
         set({ userData: null });
       }
@@ -32,8 +40,8 @@ const useUserStore = create<UserState>((set, get) => ({
     }
   },
   signOut: () => {
-    Cookies.remove('token');
-    localStorage.removeItem('token'); // Menghapus token dari localStorage
+    Cookies.remove('refreshToken');
+    localStorage.removeItem('token');
     set({ userData: null });
   }
 }));
