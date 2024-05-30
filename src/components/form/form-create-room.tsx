@@ -7,7 +7,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -23,7 +22,6 @@ import { UploadedFilesCard } from "../card/UploadedFilesCard";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -33,14 +31,13 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { schemasCreateRoom } from "@/utils/schemas";
-import axios from "axios";
-import { toast } from "sonner";
+import axios, { AxiosError } from "axios";
 import { useToast } from "../ui/use-toast";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export function FormCreateRoom() {
   const [files, setFiles] = useState<File[]>([]);
-  const {toast} = useToast()
+  const { toast } = useToast();
   const form = useForm<z.infer<typeof schemasCreateRoom>>({
     resolver: zodResolver(schemasCreateRoom),
     defaultValues: {
@@ -49,59 +46,51 @@ export function FormCreateRoom() {
       ukuranKamar: "",
       typeKamar: undefined,
       diskonKamar: "",
-      namaFasilitas: "",
-      deskripsiFasilitas: "",
-      typeFasilitas: undefined,
       statusKamar: undefined,
       images: [],
     },
   });
   const navigate = useNavigate();
- async function onSubmit(values: z.infer<typeof schemasCreateRoom>) {
-   const formData = new FormData();
-   formData.append("namaKamar", values.namaKamar);
-   formData.append("ukuranKamar", values.ukuranKamar);
-   formData.append("deskripsiKamar", values.descriptionKamar);
-   formData.append("typeKamar", values.typeKamar);
+  async function onSubmit(values: z.infer<typeof schemasCreateRoom>) {
+    const formData = new FormData();
+    formData.append("namaKamar", values.namaKamar);
+    formData.append("ukuranKamar", values.ukuranKamar);
+    formData.append("deskripsiKamar", values.descriptionKamar);
+    formData.append("typeKamar", values.typeKamar);
     if (values.diskonKamar !== undefined) {
       formData.append("diskonKamar", values.diskonKamar.toString());
     }
-   formData.append("namaFasilitas", values.namaFasilitas);
-   formData.append("deskripsiFasilitas", values.deskripsiFasilitas);
-   formData.append("typeFasilitas", values.typeFasilitas);
-   formData.append("statusKamar", values.statusKamar);
-   values.images.forEach((file) => {
-     formData.append("file", file);
-   });
+    formData.append("statusKamar", values.statusKamar);
+    values.images.forEach((file) => {
+      formData.append("file", file);
+    });
 
-   try {
-     const response = await axios.post("http://localhost:3000/api/rooms", formData, {
-       headers: {
-         "Content-Type": "multipart/form-data",
-       },
-     });
-     if(response.status === 201) {
-       toast({
-         title: "Success",
-         description: "Kamar dan fasilitas berhasil dibuat",
-       })
-       form.reset();
-       navigate("/admin/rooms")
-     } else {
-       toast({
-         title: "Something went wrong",
-         description: response.data.message,
-         variant: "destructive",
-       })
-     }
-   } catch (error) {
-    toast({
-      title: "Something went wrong",
-      description: "Kamar dan fasilitas gagal dibuat",
-      variant: "destructive",
-    })
-   }
- }
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/rooms",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      toast({
+        title: "Success",
+        description: response.data.msg,
+        duration: 3000,
+      })
+
+      navigate("/admin/rooms")
+    } catch (error: AxiosError | any) {
+      toast({
+        title: "Something went wrong",
+        description: error.response.data.msg,
+        variant: "destructive",
+      });
+    }
+  }
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -110,8 +99,10 @@ export function FormCreateRoom() {
             <div className="grid items-start gap-4 auto-rows-max lg:col-span-2 lg:gap-8">
               <Card x-chunk="dashboard-07-chunk-0">
                 <CardHeader>
-                  <CardTitle>General Information</CardTitle>
-                  <CardDescription>tambahkan informasi</CardDescription>
+                  <CardTitle>Informasi Kamar</CardTitle>
+                  <CardDescription>
+                    tambahkan informasi untuk kamar
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="grid gap-3">
@@ -198,74 +189,6 @@ export function FormCreateRoom() {
                   </div>
                 </CardContent>
               </Card>
-              <Card x-chunk="dashboard-07-chunk-1">
-                <CardHeader>
-                  <CardTitle>Fasilitas</CardTitle>
-                  <CardDescription>tambahkan fasilitas kamar</CardDescription>
-                </CardHeader>
-                <CardContent className="grid gap-3">
-                  <FormField
-                    control={form.control}
-                    name="namaFasilitas"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Nama Fasilitas</FormLabel>
-                        <FormControl>
-                          <Input
-                            id="namaFasilitas"
-                            type="text"
-                            placeholder="Silahkan isi"
-                            {...field}
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="deskripsiFasilitas"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Deskripsi Fasilitas</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            id="deskripsiFasilitas"
-                            className="min-h-20"
-                            {...field}
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="typeFasilitas"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Type Fasilitas</FormLabel>
-                        <FormControl>
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                          >
-                            <SelectTrigger className="w-full">
-                              <SelectValue placeholder="Pilih type fasilitas" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="Standard">Standard</SelectItem>
-                              <SelectItem value="Deluxe">Deluxe</SelectItem>
-                              <SelectItem value="Suite">Suite</SelectItem>
-                              <SelectItem value="Premium">Premium</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                </CardContent>
-              </Card>
-            </div>
-            <div className="grid items-start gap-4 auto-rows-max lg:gap-8">
               <Card x-chunk="dashboard-07-chunk-3">
                 <CardHeader>
                   <CardTitle>Status kamar</CardTitle>
@@ -292,7 +215,9 @@ export function FormCreateRoom() {
                               <SelectItem value="Tersedia">Tersedia</SelectItem>
                               <SelectItem value="Booking">Booking</SelectItem>
                               <SelectItem value="Archived">Archived</SelectItem>
-                              <SelectItem value="Sedang diperbaiki">Sedang diperbaiki</SelectItem>
+                              <SelectItem value="Sedang diperbaiki">
+                                Sedang diperbaiki
+                              </SelectItem>
                             </SelectContent>
                           </Select>
                         </FormControl>
@@ -301,11 +226,16 @@ export function FormCreateRoom() {
                   />
                 </CardContent>
               </Card>
+              <Button className="hidden w-32 lg:block" type="submit">
+                Buat Kamar
+              </Button>
+            </div>
+            <div className="grid items-start gap-4 auto-rows-max lg:gap-8">
               <Card className="overflow-hidden" x-chunk="dashboard-07-chunk-4">
                 <CardHeader>
-                  <CardTitle>foto Kamar</CardTitle>
+                  <CardTitle>Upload Gambar</CardTitle>
                   <CardDescription>
-                    Lipsum dolor sit amet, consectetur adipiscing elit
+                    Tambahkan Gambar untuk kamar minimal 1!
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -314,12 +244,14 @@ export function FormCreateRoom() {
                     name="images"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Foto Kamar</FormLabel>
                         <FormControl>
                           <div className="space-y-6">
                             <FileUploader
                               value={field.value}
-                              onValueChange={field.onChange}
+                              onValueChange={(newFiles) => {
+                                field.onChange(newFiles);
+                                setFiles(newFiles);
+                              }}
                               maxFiles={5}
                               maxSize={1024 * 1024 * 5}
                               accept={{ "image/*": [] }}
@@ -341,17 +273,11 @@ export function FormCreateRoom() {
                 </CardContent>
               </Card>
             </div>
-          </div>
-          <div className="flex items-center justify-center gap-2 md:hidden">
-            <Button variant="outline" size="sm">
-              Discard
+            <Button className="w-32 lg:hidden" type="submit">
+              Buat Kamar
             </Button>
-            <Button size="sm">Save Product</Button>
           </div>
         </div>
-        <Button className="w-32" type="submit">
-          Submit
-        </Button>
       </form>
     </Form>
   );
