@@ -19,6 +19,8 @@ import { DashBoardRoomsPage } from "./pages/DasboardRoomsAdmin.tsx";
 import CreateRoomPage from "./pages/CreateRoomPage.tsx";
 import AuthRoute from "./middlewares/auth-route.tsx";
 import EditRoomPage from "./pages/EditRoomPage.tsx";
+import { OrdersPage } from "./pages/OrdersPage.tsx";
+import { Dashboard } from "./pages/Dashboard.tsx";
 
 axios.defaults.withCredentials = true;
 
@@ -56,10 +58,26 @@ const router = createBrowserRouter([
     element: <ReservationsPage />,
   },
   {
+    path: "admin/dashboard",
+    element: (
+      <AuthRoute adminOnly={true}>
+        <Dashboard />
+      </AuthRoute>
+    )
+  },
+  {
     path: "admin/rooms",
     element: (
       <AuthRoute adminOnly={true}>
         <DashBoardRoomsPage />
+      </AuthRoute>
+    )
+  },
+  {
+    path: "admin/orders",
+    element: (
+      <AuthRoute adminOnly={true}>
+        <OrdersPage />
       </AuthRoute>
     )
   },
