@@ -116,9 +116,6 @@ export default function EditRoomPage() {
           <AvatarDropDown />
         </header>
         <main className="grid items-start flex-1 gap-4 p-4 mt-5 sm:px-6 sm:py-0 md:gap-8">
-          <div className="flex items-center">
-            <h1 className="text-lg font-semibold md:text-2xl">Edit Kamar</h1>
-          </div>
           <FormEditRoom data={data as Rooms} id={id as string} />
         </main>
       </div>
