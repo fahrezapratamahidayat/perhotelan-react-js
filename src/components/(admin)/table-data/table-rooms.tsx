@@ -76,6 +76,7 @@ export default function TableRooms({ data }: { data: TypeRooms }) {
       console.log(error)
     }
   }
+
   return (
     <>
       <AlertDialog open={dialogEdit} onOpenChange={setDialogEdit}>
@@ -144,8 +145,7 @@ export default function TableRooms({ data }: { data: TypeRooms }) {
                     {" "}
                     Rp. {""}
                     {formatCurrency(
-                      room.hargaKamar * (1 - room.diskonKamar / 100) +
-                        room.fasilitasKamar.hargaFasilitas
+                      room.hargaKamar * (1 - room.diskonKamar / 100)
                     )}
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
