@@ -270,9 +270,9 @@ export default function ReservationForm({ id, data }: formProps) {
                 <span className="text-base font-semibold">
                   Rp.{" "}
                   {formatCurrency(
-                    data.hargaKamar * (1 - data.diskonKamar / 100) +
-                      data.fasilitasKamar.hargaFasilitas
+                    data.hargaKamar * (1 - data.diskonKamar / 100)
                   )}
+                  / malam
                 </span>
               </div>
               <div className="mt-6 space-y-2">
@@ -420,10 +420,6 @@ export default function ReservationForm({ id, data }: formProps) {
                         </span>
                       </div>
                       <div className="flex justify-between">
-                        <span>Harga fasilitas</span>
-                        <span>Rp. {data.fasilitasKamar.hargaFasilitas}</span>
-                      </div>
-                      <div className="flex justify-between">
                         <span>Promo atau Diskon</span>
                         <span>Rp. {data.diskonKamar}%</span>
                       </div>
@@ -434,8 +430,7 @@ export default function ReservationForm({ id, data }: formProps) {
                           {formatCurrency(
                             data.hargaKamar *
                               duration *
-                              (1 - data.diskonKamar / 100) +
-                              data.fasilitasKamar.hargaFasilitas
+                              (1 - data.diskonKamar / 100)  
                           )}
                         </span>
                       </div>
