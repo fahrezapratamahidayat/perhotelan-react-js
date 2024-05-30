@@ -107,7 +107,7 @@ export interface userData {
 export interface Resevasi {
     status: number;
     message: string;
-    data: reservasiTypes;
+    datas: reservasiTypes[];
 }
 
 export interface reservasiTypes {

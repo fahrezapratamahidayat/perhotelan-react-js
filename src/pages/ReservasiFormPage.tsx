@@ -27,26 +27,29 @@ import useUserStore from "@/hooks/use-session";
 import { useForm } from "react-hook-form";
 import ReservationForm from "@/components/form/form-reserve";
 import axios from "axios";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import { detailRoom } from "@/types";
+
+import ErrorPage from "@/components/error/error-page";
 export default function ReservasiFormPage() {
   const { id } = useParams();
   const [checkInDate, setCheckInDate] = React.useState<Date | undefined>();
   const [duration, setDuration] = React.useState<number>(1);
   const checkOutDate = checkInDate ? addDays(checkInDate, duration) : undefined;
   const { userData } = useUserStore();
+  const { mutate } = useSWRConfig();
   const fetcher = async () => {
     const response = await axios.get(`http://localhost:3000/api/rooms/${id}`);
     return response.data.datas;
   };
 
-  const { data } = useSWR<detailRoom>(`/rooms`, fetcher);
-  if (!data || !data.images || !data.fasilitasKamar)
-    return <div>Loading...</div>;
+  const { data, error, isLoading } = useSWR<detailRoom>(`/rooms`, fetcher);
+  if(isLoading) return <div>Loading...</div>
+  if(error) return <ErrorPage error={error} reset={() => mutate("/rooms")}/>
   return (
     <>
       <Navbar />
-      <ReservationForm id={id} data={data} />
+      <ReservationForm id={id} data={data as detailRoom} />
       {/* <div className="w-full max-w-lg px-5 py-4 rounded-lg ">
           <div className="">
             <h2 className="text-2xl font-bold tracking-tighter">
