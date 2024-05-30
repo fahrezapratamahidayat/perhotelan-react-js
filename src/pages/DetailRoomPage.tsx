@@ -11,6 +11,7 @@ import { FasilityRoomPremium } from "@/components/room/roomDetails";
 import { Separator } from "@/components/ui/separator";
 import useUserStore from "@/hooks/use-session";
 import { formatCurrency } from "@/utils/helpers";
+import ErrorPage from "@/components/error/error-page";
 
 export default function DetailRoomPage() {
   const { id } = useParams();
@@ -23,8 +24,11 @@ export default function DetailRoomPage() {
     return response.data.datas;
   };
 
-  const { data } = useSWR<detailRoom>(`/rooms`, fetcher);
-  if (!data || !data.images) return <div>Loading...</div>;
+  const { data, error, isLoading } = useSWR<detailRoom>(`/rooms`, fetcher);
+if (error) return <ErrorPage error={error} reset={() => mutate("/rooms")} />;
+if (!data || !data.images || data.images.length === 0)
+  return <div>Loading...</div>;
+if (isLoading) return <div>Loading...</div>;
   return (
     <div className="min-h-screen">
       <Navbar />
@@ -105,51 +109,37 @@ export default function DetailRoomPage() {
           </div>
           <div className="grid gap-4">
             <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center ">
-                    <CardTitle>{data.namaKamar}</CardTitle>
-                    <div className="flex items-center justify-center mt-1 ml-2">
-                      <span className="mr-1 text-base text-muted-foreground">
-                        {data.ratingKamar}/5
-                      </span>
-                      <svg
-                        width="15"
-                        height="15"
-                        viewBox="0 0 20 20"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M20 7.4H12.3667L10 0L7.63333 7.4H0L6.16667 11.9667L3.83333 19.3333L10 14.7667L16.1667 19.3333L13.8 11.9333L20 7.4Z"
-                          fill="#FFCE31"
-                        />
-                      </svg>
-                    </div>
-                  </div>
+              <CardHeader className="flex flex-row items-start bg-muted/50">
+                <div className="flex items-center justify-between w-full gap-0.5">
+                  <CardTitle>{data.namaKamar}</CardTitle>
                   <Heart />
                 </div>
-                <div className="flex flex-col gap-3">
-                  <div className="flex items-center gap-2">
-                    <h2 className="text-normal font-semibold">Harga / Malam</h2>
-                    <span className="text-base text-muted-foreground">
-                      Rp.{" "}
-                      {formatCurrency(
-                        data.hargaKamar * (1 - data.diskonKamar / 100) +
-                          data.fasilitasKamar.hargaFasilitas
-                      )}{" "}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <h2 className="text-normal font-semibold">Type Kamar</h2>
-                    <span className="text-base font-semibold text-muted-foreground">
-                      ({data.typeKamar})
-                    </span>
-                  </div>
-                </div>
               </CardHeader>
-              <CardContent>
-                <Separator />
+              <CardContent className="p-6 text-sm">
+                <div className="grid gap-3">
+                  <div className="font-semibold">Tentang Kamar</div>
+                  <ul className="grid gap-3">
+                    <li className="flex items-center justify-between">
+                      <span className="text-muted-foreground">
+                        Harga per malam
+                      </span>
+                      <span>Rp. {formatCurrency(data.hargaKamar)}</span>
+                    </li>
+                    <li className="flex items-center justify-between">
+                      <span className="text-muted-foreground">
+                        Diskon / Promo
+                      </span>
+                      <span>{data.diskonKamar}</span>
+                    </li>
+                    <li className="flex items-center justify-between">
+                      <span className="text-muted-foreground">
+                        Type Kamar
+                      </span>
+                      <span>{data.typeKamar}</span>
+                    </li>
+                  </ul>
+                </div>
+                <Separator className="my-4" />
                 <div className="flex flex-col gap-4 mt-4">
                   <Button
                     className="w-full"
@@ -161,9 +151,8 @@ export default function DetailRoomPage() {
                       }
                     }}
                   >
-                    Reservation now
+                    Resevasi Sekarang
                   </Button>
-                  <Button variant={"outline"}>Add to wishlist</Button>
                 </div>
               </CardContent>
             </Card>
