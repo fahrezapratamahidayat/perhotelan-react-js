@@ -37,7 +37,8 @@ export function DashBoardRoomsPage() {
   const { mutate } = useSWRConfig();
 
   const fetcher = async () => {
-    const response = await axios.get("http://localhost:3000/api/rooms");
+    const params = { statuskamar: "reserved" };
+    const response = await axios.get("http://localhost:3000/api/rooms", {params});
     return response.data;
   };
   const navigate = useNavigate();
