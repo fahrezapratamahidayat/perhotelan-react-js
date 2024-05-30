@@ -41,21 +41,21 @@ export const FasilityRoomStandard = (data: any) => {
           <WifiIcon className="w-6 h-6" />
           <div className="flex flex-col ">
             <div className="font-medium">Wifi</div>
-            <div className="text-gray-500">High Speed Wifi</div>
+            <div className="text-muted-foreground">High Speed Wifi</div>
           </div>
         </div>
         <div className="flex gap-2 items-centter">
           <Tv className="w-6 h-6" />
           <div className="flex flex-col ">
             <div className="font-medium">TV</div>
-            <div className="text-gray-500">55" Smart TV</div>
+            <div className="text-muted-foreground">55" Smart TV</div>
           </div>
         </div>
         <div className="flex gap-2 items-centter">
           <AirVentIcon className="w-6 h-6" />
           <div className="flex flex-col ">
             <div className="font-medium">AC</div>
-            <div className="text-gray-500">Air Vent</div>
+            <div className="text-muted-foreground">Air Vent</div>
           </div>
         </div>
         <div className="flex gap-2 items-centter">
@@ -106,21 +106,21 @@ export const FasilityRoomPremium = (data: any) => {
         <WifiIcon className="w-6 h-6" />
         <div className="flex flex-col ">
           <div className="font-medium">Wifi</div>
-          <div className="text-gray-500">High Speed Wifi</div>
+          <div className="text-muted-foreground">High Speed Wifi</div>
         </div>
       </div>
       <div className="flex gap-2 items-centter">
         <Tv className="w-6 h-6" />
         <div className="flex flex-col ">
           <div className="font-medium">TV</div>
-          <div className="text-gray-500">55" Smart TV</div>
+          <div className="text-muted-foreground">55" Smart TV</div>
         </div>
       </div>
       <div className="flex gap-2 items-centter">
         <AirVentIcon className="w-6 h-6" />
         <div className="flex flex-col ">
           <div className="font-medium">AC</div>
-          <div className="text-gray-500">Air Vent</div>
+          <div className="text-muted-foreground">Air Vent</div>
         </div>
       </div>
       <div className="flex gap-2 items-centter">
