@@ -61,8 +61,7 @@ export function CardHotel({ data, className }: CardHotelProps) {
               <span className="text-base font-semibold">
                 Rp. {""}
                 {formatCurrency(
-                  data.hargaKamar * (1 - data.diskonKamar / 100) +
-                    data.fasilitasKamar.hargaFasilitas
+                  data.hargaKamar * (1 - data.diskonKamar / 100)
                 )}
               </span>
               <span className="text-base"> /night</span>
