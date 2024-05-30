@@ -2,10 +2,12 @@ import { Bell, Home, LineChart, Package, Package2, ShoppingCart, Users } from "l
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 export default function NavbarAdmin() {
+  const pathname = useLocation().pathname;
+  console.log(pathname)
   return (
-    <div className="border-r bg-muted/40 md:block">
+    <div className="hidden border-r bg-muted/40 md:block">
       <div className="flex flex-col h-full max-h-screen gap-2">
         <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
           <Link to="/" className="flex items-center gap-2 font-semibold">
@@ -28,7 +30,9 @@ export default function NavbarAdmin() {
             </Link>
             <Link
               to="/admin/orders"
-              className="flex items-center gap-3 px-3 py-2 transition-all rounded-lg text-muted-foreground hover:text-primary"
+              className={`flex items-center gap-3 px-3 py-2 transition-all rounded-lg ${
+                pathname.includes("/orders") ? "bg-muted" : "hover:bg-muted"
+              } text-primary hover:text-primary`}
             >
               <ShoppingCart className="w-4 h-4" />
               Orders
@@ -38,7 +42,9 @@ export default function NavbarAdmin() {
             </Link>
             <Link
               to="/admin/rooms"
-              className="flex items-center gap-3 px-3 py-2 transition-all rounded-lg bg-muted text-primary hover:text-primary"
+              className={`flex items-center gap-3 px-3 py-2 transition-all rounded-lg ${
+                pathname.includes("/rooms") ? "bg-muted" : "hover:bg-muted"
+              } text-primary hover:text-primary`}
             >
               <Package className="w-4 h-4" />
               Rooms{" "}
