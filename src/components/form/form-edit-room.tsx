@@ -51,9 +51,6 @@ export function FormEditRoom({ data, id }: Props) {
       ukuranKamar: "",
       typeKamar: undefined,
       diskonKamar: "",
-      namaFasilitas: "",
-      deskripsiFasilitas: "",
-      typeFasilitas: undefined,
       statusKamar: undefined,
       images: [],
     },
@@ -66,12 +63,7 @@ export function FormEditRoom({ data, id }: Props) {
     formData.append("ukuranKamar", values.ukuranKamar);
     formData.append("deskripsiKamar", values.descriptionKamar);
     formData.append("typeKamar", values.typeKamar);
-    if (values.diskonKamar !== undefined) {
-      formData.append("diskonKamar", values.diskonKamar.toString());
-    }
-    formData.append("namaFasilitas", values.namaFasilitas);
-    formData.append("deskripsiFasilitas", values.deskripsiFasilitas);
-    formData.append("typeFasilitas", values.typeFasilitas);
+    formData.append("diskonKamar", values.diskonKamar ? values.diskonKamar.toString() : "0");
     formData.append("statusKamar", values.statusKamar);
     values.images.forEach((file) => {
       formData.append("file", file);
@@ -116,9 +108,6 @@ export function FormEditRoom({ data, id }: Props) {
       ukuranKamar: data.ukuranKamar,
       typeKamar: data.typeKamar,
       diskonKamar: data.diskonKamar,
-      namaFasilitas: data.fasilitasKamar.namaFasilitas,
-      deskripsiFasilitas: data.fasilitasKamar.deskripsiFasilitas,
-      typeFasilitas: data.fasilitasKamar.typeFasilitas,
       statusKamar: data.statusKamar,
     });
   }, [form, data]);
@@ -130,8 +119,8 @@ export function FormEditRoom({ data, id }: Props) {
             <div className="grid items-start gap-4 auto-rows-max lg:col-span-2 lg:gap-8">
               <Card x-chunk="dashboard-07-chunk-0">
                 <CardHeader>
-                  <CardTitle>General Information</CardTitle>
-                  <CardDescription>tambahkan informasi</CardDescription>
+                  <CardTitle>Informasi Kamar</CardTitle>
+                  <CardDescription>Edit Informasi Untuk Kamar</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="grid gap-3">
@@ -218,74 +207,6 @@ export function FormEditRoom({ data, id }: Props) {
                   </div>
                 </CardContent>
               </Card>
-              <Card x-chunk="dashboard-07-chunk-1">
-                <CardHeader>
-                  <CardTitle>Fasilitas</CardTitle>
-                  <CardDescription>tambahkan fasilitas kamar</CardDescription>
-                </CardHeader>
-                <CardContent className="grid gap-3">
-                  <FormField
-                    control={form.control}
-                    name="namaFasilitas"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Nama Fasilitas</FormLabel>
-                        <FormControl>
-                          <Input
-                            id="namaFasilitas"
-                            type="text"
-                            placeholder="Silahkan isi"
-                            {...field}
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="deskripsiFasilitas"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Deskripsi Fasilitas</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            id="deskripsiFasilitas"
-                            className="min-h-20"
-                            {...field}
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="typeFasilitas"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Type Fasilitas</FormLabel>
-                        <FormControl>
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                          >
-                            <SelectTrigger className="w-full">
-                              <SelectValue placeholder="Pilih type fasilitas" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="Standard">Standard</SelectItem>
-                              <SelectItem value="Deluxe">Deluxe</SelectItem>
-                              <SelectItem value="Suite">Suite</SelectItem>
-                              <SelectItem value="Premium">Premium</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                </CardContent>
-              </Card>
-            </div>
-            <div className="grid items-start gap-4 auto-rows-max lg:gap-8">
               <Card x-chunk="dashboard-07-chunk-3">
                 <CardHeader>
                   <CardTitle>Status kamar</CardTitle>
@@ -323,6 +244,11 @@ export function FormEditRoom({ data, id }: Props) {
                   />
                 </CardContent>
               </Card>
+              <Button className="hidden w-32 lg:block" type="submit">
+                Buat Kamar
+              </Button>
+            </div>
+            <div className="grid items-start gap-4 auto-rows-max lg:gap-8">
               <Card className="overflow-hidden" x-chunk="dashboard-07-chunk-4">
                 <CardHeader>
                   <CardTitle>foto Kamar</CardTitle>
@@ -364,15 +290,9 @@ export function FormEditRoom({ data, id }: Props) {
               </Card>
             </div>
           </div>
-          <div className="flex items-center justify-center gap-2 md:hidden">
-            <Button variant="outline" size="sm">
-              Discard
-            </Button>
-            <Button size="sm">Save Product</Button>
-          </div>
         </div>
-        <Button className="w-32" type="submit">
-          Submit
+        <Button className="w-32 lg:hidden" type="submit">
+          Edit Kamar
         </Button>
       </form>
     </Form>
