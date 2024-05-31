@@ -25,7 +25,7 @@ export default function AuthRoute({ children, adminOnly }: AuthRouteProps) {
       return;
     }
 
-    if (adminOnly && userData?.roleTamu !== "Admin") {
+    if (adminOnly && userData?.peranTamu !== "Admin") {
       toast({
         title: "Unauthorized",
         description: "You are not authorized to access this page",
@@ -40,7 +40,7 @@ export default function AuthRoute({ children, adminOnly }: AuthRouteProps) {
   }, [login, adminOnly, userData, toast, navigate, location]);
 
   // Jika login dan userData valid, atau kondisi admin tidak diperlukan, tampilkan children
-  if (login && (!adminOnly || (adminOnly && userData?.roleTamu === "Admin"))) {
+  if (login && (!adminOnly || (adminOnly && userData?.peranTamu === "Admin"))) {
     return children;
   }
 

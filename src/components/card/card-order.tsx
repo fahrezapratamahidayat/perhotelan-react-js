@@ -51,8 +51,8 @@ export default function CardOrder({ data }: { data: reservasiTypes }) {
     setIsloading(true);
     try {
       const respone = await axios.put(`http://localhost:3000/api/reservation`, {
-        reservationId: data.reservationId,
-        statusReservasi: "Confirmed",
+        reservationId: data.idReservasi,
+        statusReservasi: "Diterima",
       });
       if (respone.data.status === 200) {
         toast({
@@ -79,7 +79,7 @@ export default function CardOrder({ data }: { data: reservasiTypes }) {
         <CardHeader className="flex flex-row items-start bg-muted/50">
           <div className="grid gap-0.5">
             <CardTitle className="flex items-center gap-2 text-lg group">
-              Reservasi {data.reservationId}
+              Reservasi {data.idReservasi}
               <Button
                 size="icon"
                 variant="outline"
@@ -164,7 +164,7 @@ export default function CardOrder({ data }: { data: reservasiTypes }) {
             <dl className="grid gap-3">
               <div className="flex items-center justify-between">
                 <dt className="text-muted-foreground">No Pelanggan</dt>
-                <dd>{data.tamu.tamuId}</dd>
+                <dd>{data.tamu.idTamu}</dd>
               </div>
               <div className="flex items-center justify-between">
                 <dt className="text-muted-foreground">Nama Pelanggan</dt>
@@ -181,8 +181,8 @@ export default function CardOrder({ data }: { data: reservasiTypes }) {
               <div className="flex items-center justify-between">
                 <dt className="text-muted-foreground">Telepon</dt>
                 <dd>
-                  <a href={`http://wa.me/${data.tamu.nomerTelephoneTamu}`}>
-                    {formatPhoneNumber(data.tamu.nomerTelephoneTamu)}
+                  <a href={`http://wa.me/${data.tamu.nomorTeleponTamu}`}>
+                    {formatPhoneNumber(data.tamu.nomorTeleponTamu)}
                   </a>
                 </dd>
               </div>
@@ -195,17 +195,17 @@ export default function CardOrder({ data }: { data: reservasiTypes }) {
               <div className="flex items-center justify-between">
                 <dt className="flex items-center gap-1 text-muted-foreground">
                   <CreditCard className="w-4 h-4" />
-                  {data.Payment.metodePembayaran}
+                  {data.Pembayaran.metodePembayaran}
                 </dt>
                 <dd>
-                  {data.Payment.metodePembayaran !== "????"
+                  {data.Pembayaran.metodePembayaran !== "????"
                     ? "**** **** **** 4532"
                     : "????"}
                 </dd>
               </div>
               <div className="flex items-center justify-between">
                 <dt className="text-muted-foreground">Status Pembayaran</dt>
-                <dd>{data.Payment.statusPembayaran}</dd>
+                <dd>{data.Pembayaran.statusPembayaran}</dd>
               </div>
               <div className="flex items-center justify-between">
                 <dt className="text-muted-foreground">Status Reservasi</dt>
@@ -215,15 +215,15 @@ export default function CardOrder({ data }: { data: reservasiTypes }) {
           </div>
           <Separator className="my-4" />
           <div className="grid gap-3">
-            {data.Payment.statusPembayaran === "lunas" &&
-            data.statusReservasi !== "Confirmed" && (
+            {data.Pembayaran.statusPembayaran === "lunas" &&
+            data.statusReservasi !== "Diterima" && (
               <Button className="w-full" onClick={handleUpdateReservasion}>
                 Konfirmasi Reservasi
               </Button>
             )}
             {
-              data.Payment.statusPembayaran === "lunas" &&
-              data.statusReservasi === "Confirmed" && (
+              data.Pembayaran.statusPembayaran === "lunas" &&
+              data.statusReservasi === "Diterima" && (
                 <Button
                   variant="suucces"
                   className="w-full"

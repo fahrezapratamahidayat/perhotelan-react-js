@@ -28,7 +28,7 @@ export const CardDataReservasion = ({ data }: PaymentProps) => {
               <span className="text-sm text-muted-foreground ">
                 Reservation Number
               </span>
-              <span className="font-medium">{data?.reservationId}</span>
+              <span className="font-medium">{data?.idReservasi}</span>
             </div>
             <div className="grid gap-1">
               <span className="text-sm text-muted-foreground ">Nama Kamar</span>
@@ -36,7 +36,7 @@ export const CardDataReservasion = ({ data }: PaymentProps) => {
             </div>
             <div className="grid gap-1">
               <span className="text-sm text-muted-foreground ">Hotel Type</span>
-              <span className="font-medium">{data?.kamar.typeKamar}</span>
+              <span className="font-medium">{data?.kamar.tipeKamar}</span>
             </div>
             <div className="grid gap-1">
               <span className="text-sm text-muted-foreground ">
@@ -71,7 +71,7 @@ export const CardDataReservasion = ({ data }: PaymentProps) => {
               <span className="text-sm text-muted-foreground ">
                 Guest Details
               </span>
-              <span className="font-medium">2 Adults, 1 Child</span>
+              <span className="font-medium">{data.jumlahTamu}</span>
             </div>
             <div className="grid gap-1 mt-5">
               <span className="text-sm text-muted-foreground ">Nama Tamu</span>
@@ -86,8 +86,8 @@ export const CardDataReservasion = ({ data }: PaymentProps) => {
                 Phone Number
               </span>
               <span className="font-medium">
-                {data?.tamu.nomerTelephoneTamu
-                  ? formatPhoneNumber(data.tamu.nomerTelephoneTamu)
+                {data?.tamu.nomorTeleponTamu
+                  ? formatPhoneNumber(data.tamu.nomorTeleponTamu)
                   : ""}
               </span>
             </div>
@@ -106,7 +106,7 @@ export const CardPaymentMethodDebit = ({ data }: PaymentProps) => {
       const response = await axios.post(
         "http://localhost:3000/api//confirm-payment",
         {
-          paymentId: payment.Payment.paymentId,
+          paymentId: payment.Pembayaran.idPembayaran,
           amount: 936000,
           metodePembayaran,
         }
@@ -160,7 +160,7 @@ export const CardPaymentMethodDebit = ({ data }: PaymentProps) => {
             <p className="text-left">Harga</p>
             <h2 className="text-base font-bold text-right">
               Rp.{""}
-              {formatCurrency(data.Payment.jumlahBayar)}
+              {formatCurrency(data.Pembayaran.jumlahBayar)}
             </h2>
           </div>
         </div>
@@ -168,7 +168,7 @@ export const CardPaymentMethodDebit = ({ data }: PaymentProps) => {
           <p className="text-left">Total</p>
           <h2 className="text-base font-bold text-right">
             Rp.{""}
-            {formatCurrency(data.Payment.jumlahBayar)}
+            {formatCurrency(data.Pembayaran.jumlahBayar)}
           </h2>
         </div>
         <div className="flex self-end mt-2">
@@ -232,7 +232,7 @@ export const CardPaymentMethodBank = ({ data }: PaymentProps) => {
             <h2 className="text-base font-bold text-right">
               {" "}
               Rp.{""}
-              {formatCurrency(data.Payment.jumlahBayar)}
+              {formatCurrency(data.Pembayaran.jumlahBayar)}
             </h2>
           </div>
         </div>
@@ -241,7 +241,7 @@ export const CardPaymentMethodBank = ({ data }: PaymentProps) => {
           <h2 className="text-base font-bold text-right">
             {" "}
             Rp.{""}
-            {formatCurrency(data.Payment.jumlahBayar)}
+            {formatCurrency(data.Pembayaran.jumlahBayar)}
           </h2>
         </div>
         <div className="flex self-end mt-2 h-[54px]">
@@ -300,7 +300,7 @@ export const CardPaymentMethodATM = ({ data }: PaymentProps) => {
             <h2 className="text-base font-bold text-right">
               {" "}
               Rp.{""}
-              {formatCurrency(data.Payment.jumlahBayar)}
+              {formatCurrency(data.Pembayaran.jumlahBayar)}
             </h2>
           </div>
         </div>
@@ -309,7 +309,7 @@ export const CardPaymentMethodATM = ({ data }: PaymentProps) => {
           <h2 className="text-base font-bold text-right">
             {" "}
             Rp.{""}
-            {formatCurrency(data.Payment.jumlahBayar)}
+            {formatCurrency(data.Pembayaran.jumlahBayar)}
           </h2>
         </div>
         <div className="flex self-end mt-2 h-[54px]">
@@ -358,7 +358,7 @@ export const CardPaymentMethodEwallet = ({ data }: PaymentProps) => {
             <h2 className="text-base font-bold text-right">
               {" "}
               Rp.{""}
-              {formatCurrency(data.Payment.jumlahBayar)}
+              {formatCurrency(data.Pembayaran.jumlahBayar)}
             </h2>
           </div>
         </div>
@@ -367,7 +367,7 @@ export const CardPaymentMethodEwallet = ({ data }: PaymentProps) => {
           <h2 className="text-base font-bold text-right">
             {" "}
             Rp.{""}
-            {formatCurrency(data.Payment.jumlahBayar)}
+            {formatCurrency(data.Pembayaran.jumlahBayar)}
           </h2>
         </div>
         <div className="flex self-end mt-2 h-[54px]">
@@ -409,7 +409,7 @@ export const CardPaymentMethodOTC = ({ data }: PaymentProps) => {
             <h2 className="text-base font-bold text-right">
               {" "}
               Rp.{""}
-              {formatCurrency(data.Payment.jumlahBayar)}
+              {formatCurrency(data.Pembayaran.jumlahBayar)}
             </h2>
           </div>
         </div>
@@ -418,7 +418,7 @@ export const CardPaymentMethodOTC = ({ data }: PaymentProps) => {
           <h2 className="text-base font-bold text-right">
             {" "}
             Rp.{""}
-            {formatCurrency(data.Payment.jumlahBayar)}
+            {formatCurrency(data.Pembayaran.jumlahBayar)}
           </h2>
         </div>
         <div className="flex self-end mt-2 h-[54px]">

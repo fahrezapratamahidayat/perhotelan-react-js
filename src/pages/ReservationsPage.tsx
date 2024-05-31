@@ -12,7 +12,7 @@ export default function ReservationsPage() {
 
   const fetcher = async () => {
     const response = await axios.get(
-      `http://localhost:3000/api/reservation/user/${userData?.tamuId}`
+      `http://localhost:3000/api/reservation/user/${userData?.idTamu}`
     );
     return response.data.data;
   };
@@ -27,7 +27,7 @@ export default function ReservationsPage() {
       <div className="flex flex-col lg:justify-between lg:flex-col ">
         {data?.map((reservation: reservasiTypes, index: number) => (
           <ReservationsList
-            key={reservation.reservationId}
+            key={reservation.idTamu}
             data={reservation}
             index={index}
           />

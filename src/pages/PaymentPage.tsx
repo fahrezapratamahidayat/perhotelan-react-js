@@ -67,7 +67,7 @@ export default function PaymentPage() {
                 Reservation Number
               </span>
               <span className="font-medium">
-                {dataReservasion?.reservationId}
+                {dataReservasion?.idReservasi}
               </span>
             </div>
             <div className="grid gap-1">
@@ -79,7 +79,7 @@ export default function PaymentPage() {
             <div className="grid gap-1">
               <span className="text-sm text-muted-foreground ">Hotel Type</span>
               <span className="font-medium">
-                {dataReservasion?.kamar.typeKamar}
+                {dataReservasion?.kamar.tipeKamar}
               </span>
             </div>
             <div className="grid gap-1">
@@ -141,8 +141,8 @@ export default function PaymentPage() {
                 Phone Number
               </span>
               <span className="font-medium">
-                {dataReservasion?.tamu.nomerTelephoneTamu
-                  ? formatPhoneNumber(dataReservasion.tamu.nomerTelephoneTamu)
+                {dataReservasion?.tamu.nomorTeleponTamu
+                  ? formatPhoneNumber(dataReservasion.tamu.nomorTeleponTamu)
                   : ""}
               </span>
             </div>

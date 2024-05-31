@@ -26,7 +26,7 @@ export function CardHotel({ data, className }: CardHotelProps) {
             alt="Hotel Image"
             className="object-cover w-full h-56 transition-transform group-hover:scale-105"
             height={400}
-            src={data.images[0].url}
+            src={data.Gambar[0].urlGambar}
             style={{
               aspectRatio: "600/400",
               objectFit: "cover",
@@ -43,11 +43,16 @@ export function CardHotel({ data, className }: CardHotelProps) {
             <span className="text-xl font-semibold">{data.namaKamar}</span>
           </div>
           <div className="flex items-center mb-2">
-            <StarIcon className="w-5 h-5 fill-primary" />
-            <StarIcon className="w-5 h-5 fill-primary" />
-            <StarIcon className="w-5 h-5 fill-primary" />
-            <StarIcon className="w-5 h-5 fill-muted stroke-muted-foreground" />
-            <StarIcon className="w-5 h-5 fill-muted stroke-muted-foreground" />
+            {Array.from({ length: 5 }).map((_, index) => (
+              <StarIcon
+                key={index}
+                className={`w-5 h-5 ${
+                  index < data.ratingKamar
+                    ? "fill-primary"
+                    : "fill-muted stroke-muted-foreground"
+                }`}
+              />
+            ))}
             <span className="ml-2 text-muted-foreground">
               ({data.ratingKamar})
             </span>
@@ -60,15 +65,13 @@ export function CardHotel({ data, className }: CardHotelProps) {
             <div className="flex items-center gap-x-1">
               <span className="text-base font-semibold">
                 Rp. {""}
-                {formatCurrency(
-                  data.hargaKamar * (1 - data.diskonKamar / 100)
-                )}
+                {formatCurrency(data.hargaKamar * (1 - data.diskonKamar / 100))}
               </span>
               <span className="text-base"> /night</span>
             </div>
           </div>
           <Link
-            to={`/rooms/${data.nomerKamar}?name=${data.namaKamar}&type=${data.typeKamar}`}
+            to={`/rooms/${data.idKamar}?name=${data.namaKamar}&type=${data.tipeKamar}`}
           >
             <Button className="w-full mt-3">Lihat Detail</Button>
           </Link>

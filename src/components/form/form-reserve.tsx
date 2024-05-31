@@ -75,6 +75,7 @@ export default function ReservationForm({ id, data }: formProps) {
   async function confirmSubmit(values: z.infer<typeof formSchema>) {
     const checkInDate = new Date(values.checkInDate);
     const duration = parseInt(values.duration);
+    const guests = parseInt(values.guests);
     const checkOutDate = calculateCheckOutDate(checkInDate, duration);
     const paymentDeadline = addHours(new Date(values.checkInDate), -24);
     const formattedPaymentDeadline = format(
@@ -85,11 +86,13 @@ export default function ReservationForm({ id, data }: formProps) {
       const respone = await axios.post(
         "http://localhost:3000/api/reservation",
         {
-          noKamar: data.nomerKamar,
-          noTamu: 1,
+          noKamar: data.idKamar,
+          noTamu: userData?.idTamu,
           checkIn: checkInDate,
           checkOut: checkOutDate,
           durasiInap: duration,
+          jumlahTamu: guests,
+          permintaanTamu: values.requests,
         }
       );
       if (respone.data.status === 200) {
@@ -110,7 +113,7 @@ export default function ReservationForm({ id, data }: formProps) {
       console.log(error);
     }
   }
-  const fullPhone = userData?.nomerTelephoneTamu;
+  const fullPhone = userData?.nomorTeleponTamu;
   const phoneWithoutCountryCode = fullPhone?.startsWith("62")
     ? fullPhone.substring(2)
     : fullPhone;
@@ -264,7 +267,7 @@ export default function ReservationForm({ id, data }: formProps) {
                     Staycation Rooms
                   </h2>
                   <span className="text-base font-semibold text-muted-foreground">
-                    ({data.typeKamar})
+                    ({data.tipeKamar})
                   </span>
                 </div>
                 <span className="text-base font-semibold">

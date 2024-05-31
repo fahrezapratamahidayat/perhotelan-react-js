@@ -14,7 +14,7 @@ export default function ReservationsList({
 }: ReservationsListProps) {
   const navigate = useNavigate();
   const hariIni = new Date();
-  const batasWaktuBayar = new Date(data.Payment.batasWaktuBayar);
+  const batasWaktuBayar = new Date(data.Pembayaran.batasWaktuBayar);
   const isExpired = batasWaktuBayar < hariIni;
   const isOverdue = batasWaktuBayar.getDate() > hariIni.getDate();
   return (
@@ -22,17 +22,17 @@ export default function ReservationsList({
       <div className="flex flex-col justify-start gap-5 p-4 mb-10 rounded-lg lg:mx-10 lg:items-center lg:flex-row ">
         <div className="w-full h-64 lg:w-72 lg:h-44 md:w-full md:h-80 sm:w-full sm:h-72">
           <img
-            src={`${data.kamar.images[0].url}`}
+            src={`${data.kamar.Gambar[0].urlGambar}`}
             alt={`Gambar ${data.kamar.namaKamar}`}
             className="object-cover w-full h-full rounded-md aspect-square"
           />
-        </div>
+        </div>  
         <div className="flex flex-col">
           <div className="flex items-center gap-1">
             <div className="flex items-center gap-1">
               <h1 className="text-xl font-bold">{data.kamar.namaKamar}</h1>
               <span className="text-sm font-medium text-muted-foreground">
-                {data.kamar?.typeKamar ?? "Tipe tidak tersedia"}
+                {data.kamar?.tipeKamar ?? "Tipe tidak tersedia"}
               </span>
             </div>
           </div>
@@ -64,13 +64,13 @@ export default function ReservationsList({
           <div className="flex items-center gap-2">
             <span>Total Pembayaran: </span>
             <span className="text-sm font-medium text-muted-foreground">
-              Rp. {formatCurrency(data.Payment.jumlahBayar)}
+              Rp. {formatCurrency(data.Pembayaran.jumlahBayar)}
             </span>
           </div>
           <div className="flex items-center gap-2">
             <span>Status Pembayaran: </span>
             <span className="text-sm font-medium text-muted-foreground">
-              {data.Payment.statusPembayaran}
+              {data.Pembayaran.statusPembayaran}
             </span>
           </div>
           <div className="flex items-center gap-2">
@@ -82,14 +82,14 @@ export default function ReservationsList({
           <div className="flex items-center gap-2">
             <span>Batas Waktu Bayar: </span>
             <span className="text-sm font-medium text-muted-foreground">
-              {formatDate(data.Payment.batasWaktuBayar, "dd MMMM yyyy HH:mm")}
+              {formatDate(data.Pembayaran.batasWaktuBayar, "dd MMMM yyyy HH:mm")}
             </span>
           </div>
           <div className="flex flex-col items-center gap-1 mt-3 lg:hidden">
-            {data.Payment.statusPembayaran === "lunas" && !isOverdue ? (
+            {data.Pembayaran.statusPembayaran === "lunas" && !isOverdue ? (
               <Button
                 className="w-full text-white bg-success hover:bg-success/50"
-                onClick={() => navigate(`/reservations/${data.reservationId}`)}
+                onClick={() => navigate(`/reservations/${data.idReservasi}`)}
               >
                 Lihat Pesanan
               </Button>
@@ -99,7 +99,7 @@ export default function ReservationsList({
                 variant={"outline"}
                 onClick={() =>
                   navigate(
-                    `/rooms/${data.noKamar}/reserve/payment?reservationId=${data.reservationId}&paymentId=${data.noPayment}`
+                    `/rooms/${data.idKamar}/reserve/payment?reservationId=${data.idReservasi}&paymentId=${data.idPembayaran}`
                   )
                 }
               >
@@ -112,10 +112,10 @@ export default function ReservationsList({
           </div>
         </div>
         <div className="flex-col hidden gap-3 lg:my-auto lg:ml-auto lg:flex">
-          {data.Payment.statusPembayaran === "lunas" && !isOverdue ? (
+          {data.Pembayaran.statusPembayaran === "lunas" && !isOverdue ? (
             <Button
               className="w-full text-white bg-success hover:bg-success/50"
-              onClick={() => navigate(`/reservations/${data.reservationId}`)}
+              onClick={() => navigate(`/reservations/${data.idReservasi}`)}
             >
               Lihat Pesanan
             </Button>
@@ -124,7 +124,7 @@ export default function ReservationsList({
               className="w-full"
               onClick={() =>
                 navigate(
-                  `/rooms/${data.noKamar}/reserve/payment?reservationId=${data.reservationId}&paymentId=${data.noPayment}`
+                  `/rooms/${data.idKamar}/reserve/payment?reservationId=${data.idReservasi}&paymentId=${data.idPembayaran}`
                 )
               }
             >

@@ -106,7 +106,7 @@ export function FormEditRoom({ data, id }: Props) {
       namaKamar: data.namaKamar,
       descriptionKamar: data.deskripsiKamar,
       ukuranKamar: data.ukuranKamar,
-      typeKamar: data.typeKamar,
+      typeKamar: data.tipeKamar,
       diskonKamar: data.diskonKamar,
       statusKamar: data.statusKamar,
     });
@@ -274,10 +274,10 @@ export function FormEditRoom({ data, id }: Props) {
                               multiple={true}
                             />
                             <UploadedFilesCard
-                              uploadedFiles={data.images.map((img) => ({
-                                key: img.id.toString(),
-                                url: img.url,
-                                name: img.name,
+                              uploadedFiles={data.Gambar.map((img) => ({
+                                key: img.idGambar.toString(),
+                                url: img.urlGambar,
+                                name: img.namaGambar,
                               }))}
                             />
                           </div>

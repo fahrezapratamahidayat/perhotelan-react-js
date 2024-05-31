@@ -22,7 +22,7 @@ export default function Navbar() {
   return (
     <header className="sticky inset-x-0 top-0 z-50">
       <nav
-        className="flex items-center justify-between p-6 lg:p-4 lg:px-8 bg-background"
+        className="flex items-center justify-between p-6 bg-transparent lg:p-4 lg:px-8 backdrop-blur-lg "
         aria-label="Global"
       >
         <div className="flex lg:flex-1">

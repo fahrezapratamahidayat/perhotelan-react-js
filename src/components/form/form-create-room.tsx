@@ -209,15 +209,11 @@ export function FormCreateRoom() {
                               id="status"
                               aria-label="Select status"
                             >
-                              <SelectValue placeholder="Select status" />
+                              <SelectValue placeholder="Select Status kamar" />
                             </SelectTrigger>
                             <SelectContent>
                               <SelectItem value="Tersedia">Tersedia</SelectItem>
-                              <SelectItem value="Booking">Booking</SelectItem>
                               <SelectItem value="Archived">Archived</SelectItem>
-                              <SelectItem value="Sedang diperbaiki">
-                                Sedang diperbaiki
-                              </SelectItem>
                             </SelectContent>
                           </Select>
                         </FormControl>

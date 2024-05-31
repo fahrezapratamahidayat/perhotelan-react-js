@@ -128,10 +128,10 @@ export default function TableRooms({ data }: { data: TypeRooms }) {
                 <TableRow>
                   <TableCell className="hidden sm:table-cell">
                     <img
-                      alt={room.images[0].name}
+                      alt={room.Gambar[0].namaGambar}
                       className="object-cover rounded-md aspect-square"
                       height="100"
-                      src={room.images[0].url}
+                      src={room.Gambar[0].urlGambar}
                       width="100"
                     />
                   </TableCell>
@@ -149,7 +149,7 @@ export default function TableRooms({ data }: { data: TypeRooms }) {
                     )}
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
-                    {room.typeKamar}
+                    {room.tipeKamar}
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
                     2023-07-12 10:42 AM
@@ -169,20 +169,20 @@ export default function TableRooms({ data }: { data: TypeRooms }) {
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem
-                          onClick={() => navigate(`/rooms/${room.nomerKamar}`)}
+                          onClick={() => navigate(`/rooms/${room.idKamar}`)}
                         >
                           <EyeIcon className="w-4 h-4 mr-2" />
                           Lihat
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                          onClick={() => handleEdit(room.nomerKamar)}
+                          onClick={() => handleEdit(room.idKamar)}
                         >
                           <Edit2 className="w-4 h-4 mr-2" />
                           Edit kamar
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className=""
-                          onClick={() => handleDelete(room.nomerKamar, room)}
+                          onClick={() => handleDelete(room.idKamar, room)}
                         >
                           <Trash2 className="w-4 h-4 mr-2 " />
                           Hapus kamar

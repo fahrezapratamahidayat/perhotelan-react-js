@@ -28,9 +28,9 @@ export default function TableCustomer({ data, selectedReservation, selectedReser
         {data?.datas?.map((item) => (
           <TableRow
             className={`${
-              selectedReservationId === item.reservationId ? "bg-accent" : ""
+              selectedReservationId === item.idReservasi ? "bg-accent" : ""
             }`}
-            key={item.reservationId}
+            key={item.idReservasi}
             onClick={() => selectedReservation(item)}
           >
             <TableCell>
@@ -47,7 +47,7 @@ export default function TableCustomer({ data, selectedReservation, selectedReser
             <TableCell className="hidden md:table-cell">{formatDate(item.tanggalCheckOut, "dd MMM yyyy")}</TableCell>
             <TableCell className="hidden md:table-cell">{item.durasiMenginap} malam</TableCell>
             <TableCell className="text-right">
-              {formatCurrency(item.Payment.jumlahBayar)}
+              {formatCurrency(item.Pembayaran.jumlahBayar)}
             </TableCell>
           </TableRow>
         ))}

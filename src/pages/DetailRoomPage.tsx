@@ -25,10 +25,10 @@ export default function DetailRoomPage() {
   };
 
   const { data, error, isLoading } = useSWR<detailRoom>(`/rooms`, fetcher);
-if (error) return <ErrorPage error={error} reset={() => mutate("/rooms")} />;
-if (!data || !data.images || data.images.length === 0)
-  return <div>Loading...</div>;
-if (isLoading) return <div>Loading...</div>;
+  if (error) return <ErrorPage error={error} reset={() => mutate("/rooms")} />;
+  if (!data || !data.Gambar || data.Gambar.length === 0)
+    return <div>Loading...</div>;
+  if (isLoading) return <div>Loading...</div>;
   return (
     <div className="min-h-screen">
       <Navbar />
@@ -39,7 +39,7 @@ if (isLoading) return <div>Loading...</div>;
               alt="Hotel Room"
               className="object-cover aspect-video rounded-xl"
               height={600}
-              src={data.images[0].url}
+              src={data.Gambar[0].urlGambar}
               width={800}
             />
           </div>
@@ -94,13 +94,13 @@ if (isLoading) return <div>Loading...</div>;
             <div className="grid gap-2">
               <h2 className="text-2xl font-bold">Gallery</h2>
               <div className="grid grid-cols-2 gap-4">
-                {data.images.map((image) => (
+                {data.Gambar.map((image) => (
                   <img
-                    key={image.id}
+                    key={image.idGambar}
                     alt="Hotel Room"
                     className="object-cover aspect-video rounded-xl"
                     height={600}
-                    src={image.url}
+                    src={image.urlGambar}
                     width={800}
                   />
                 ))}
@@ -132,10 +132,8 @@ if (isLoading) return <div>Loading...</div>;
                       <span>{data.diskonKamar}</span>
                     </li>
                     <li className="flex items-center justify-between">
-                      <span className="text-muted-foreground">
-                        Type Kamar
-                      </span>
-                      <span>{data.typeKamar}</span>
+                      <span className="text-muted-foreground">Type Kamar</span>
+                      <span>{data.tipeKamar}</span>
                     </li>
                   </ul>
                 </div>

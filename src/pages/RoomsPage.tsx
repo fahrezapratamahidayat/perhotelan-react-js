@@ -27,7 +27,7 @@ export default function RoomsPage() {
         <div className="grid grid-cols-4 gap-4">
           {data && data.length > 0 ? (
             data.map((room: Rooms) => (
-              <CardHotel key={room.nomerKamar} data={room} className="w-full" />
+              <CardHotel key={room.idKamar} data={room} className="w-full" />
             ))
           ) : (
             <p>No rooms found</p>

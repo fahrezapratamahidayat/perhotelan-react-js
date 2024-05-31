@@ -73,13 +73,13 @@ export function OrdersPage() {
   useEffect(() => {
     if (data && data.datas && data.datas.length > 0) {
       setSelectedReservation(data.datas[0]);
-      setSelectedReservationId(data.datas[0].reservationId);
+      setSelectedReservationId(data.datas[0].idReservasi);
     }
   }, [data]);
 
   const handleSelectReservation = (item: reservasiTypes) => {
     setSelectedReservation(item);
-    setSelectedReservationId(item.reservationId);
+    setSelectedReservationId(item.idReservasi);
   };
 
   if (error) return <div>failed to load</div>;
@@ -272,7 +272,7 @@ export function OrdersPage() {
             </Tabs>
           </div>
           <div>
-            {selectedReservation.reservationId && (
+            {selectedReservation.idReservasi && (
               <CardOrder data={selectedReservation} />
             )}
           </div>
