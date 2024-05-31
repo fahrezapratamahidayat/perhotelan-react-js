@@ -37,7 +37,7 @@ export default function HomePage() {
           <div className="absolute inset-0 w-full h-full bg-black [mask-image:radial-gradient(350px_200px_at_top,transparent_20%,white)]"></div>
         </div>
       </div>
-      <main className="flex-1 ">
+      {/* <main className="flex-1 ">
         <section className="w-full pt-12 md:pt-24 lg:pt-32 border-y">
           <div className="px-4 space-y-10 md:px-6 xl:space-y-16">
             <img
@@ -283,7 +283,7 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-      </main>
+      </main> */}
     </div>
   );
 }
