@@ -47,7 +47,7 @@ export function AvatarDropDown() {
             </DropdownMenuItem>
             <DropdownMenuItem>
               <ListOrderedIcon className="w-4 h-4 mr-2" />
-              <Link to={"/settings"}>Orders</Link>
+              <Link to={"/admin/orders"}>Orders</Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
               <Database className="w-4 h-4 mr-2" />

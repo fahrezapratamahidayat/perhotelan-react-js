@@ -34,6 +34,8 @@ export interface Rooms {
     ratingKamar: number;
     diskonKamar: any;
     statusKamar: "Tersedia" | "TidakTersedia" | "SedangDiperbaiki" | "Dipesan" | "Lainnya";
+    tanggalDibuat: string;
+    tanggalDiupdate: string;
     Gambar: {
         idGambar: number;
         namaGambar: string;

@@ -228,6 +228,7 @@ export default function CardOrder({ data }: { data: reservasiTypes }) {
                   variant="suucces"
                   className="w-full"
                   onClick={handleUpdateReservasion}
+                  disabled={data.statusReservasi === "Diterima"}
                 >
                   Sudah DiKonfirimasi
                 </Button>

@@ -132,7 +132,7 @@ export function DashBoardRoomsPage() {
               <div className="flex items-center">
                 <TabsList>
                   <TabsTrigger value="all">All</TabsTrigger>
-                  <TabsTrigger value="active">Active</TabsTrigger>
+                  <TabsTrigger value="Dipesan">Dipesan</TabsTrigger>
                   <TabsTrigger value="draft">Draft</TabsTrigger>
                   <TabsTrigger value="archived" className="hidden sm:flex">
                     Archived
@@ -179,6 +179,9 @@ export function DashBoardRoomsPage() {
                 </div>
               </div>
               <TabsContent value="all">
+                <TableRooms data={data} />
+              </TabsContent>
+              <TabsContent value="Dipesan">
                 <TableRooms data={data} />
               </TabsContent>
             </Tabs>

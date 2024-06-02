@@ -25,7 +25,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Rooms, TypeRooms } from "@/types";
-import { formatCurrency } from "@/utils/helpers";
+import { formatCurrency, formatDate } from "@/utils/helpers";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -116,7 +116,10 @@ export default function TableRooms({ data }: { data: TypeRooms }) {
                   Fasilitas
                 </TableHead>
                 <TableHead className="hidden md:table-cell">
-                  Created at
+                  Tgl. Dibuat
+                </TableHead>
+                <TableHead className="hidden md:table-cell">
+                  Tgl. Diupdate
                 </TableHead>
                 <TableHead>
                   <span className="sr-only">Actions</span>
@@ -152,7 +155,10 @@ export default function TableRooms({ data }: { data: TypeRooms }) {
                     {room.tipeKamar}
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
-                    2023-07-12 10:42 AM
+                    {formatDate(room.tanggalDibuat, "dd MMM yyyy HH:mm")}
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    {formatDate(room.tanggalDiupdate, "dd MMM yyyy HH:mm")}
                   </TableCell>
                   <TableCell>
                     <DropdownMenu>

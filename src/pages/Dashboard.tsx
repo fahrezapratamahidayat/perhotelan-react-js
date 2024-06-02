@@ -39,6 +39,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Link } from "react-router-dom";
+import { AvatarDropDown } from "@/components/dropdown/avatar-dropdown";
 
 export function Dashboard() {
   return (
@@ -144,22 +145,7 @@ export function Dashboard() {
               />
             </div>
           </form>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="secondary" size="icon" className="rounded-full">
-                <CircleUser className="w-5 h-5" />
-                <span className="sr-only">Toggle user menu</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuItem>Support</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <AvatarDropDown />
         </div>
       </header>
       <main className="flex flex-col flex-1 gap-4 p-4 md:gap-8 md:p-8">
