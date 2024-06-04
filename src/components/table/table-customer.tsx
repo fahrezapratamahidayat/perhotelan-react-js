@@ -17,7 +17,7 @@ export default function TableCustomer({ data, selectedReservation, selectedReser
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Nama Tamu</TableHead>
+          <TableHead>Informasi Tamu</TableHead>
     <TableHead className="hidden sm:table-cell">Status</TableHead>
     <TableHead className="hidden md:table-cell">Tanggal Check-in</TableHead>
     <TableHead className="hidden md:table-cell">Durasi Menginap</TableHead>
