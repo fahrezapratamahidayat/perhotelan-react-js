@@ -19,7 +19,7 @@ export default function ReservationsList({
   const isOverdue = batasWaktuBayar.getDate() > hariIni.getDate();
   return (
     <>
-      <div className="flex flex-col justify-start gap-5 p-4 mb-10 rounded-lg lg:mx-10 lg:items-center lg:flex-row ">
+      <div className="flex flex-col gap-5 justify-start p-4 mb-10 rounded-lg lg:mx-10 lg:items-center lg:flex-row">
         <div className="w-full h-64 lg:w-72 lg:h-44 md:w-full md:h-80 sm:w-full sm:h-72">
           <img
             src={`${data.kamar.Gambar[0].urlGambar}`}
@@ -28,15 +28,15 @@ export default function ReservationsList({
           />
         </div>  
         <div className="flex flex-col">
-          <div className="flex items-center gap-1">
-            <div className="flex items-center gap-1">
+          <div className="flex gap-1 items-center">
+            <div className="flex gap-1 items-center">
               <h1 className="text-xl font-bold">{data.kamar.namaKamar}</h1>
               <span className="text-sm font-medium text-muted-foreground">
                 {data.kamar?.tipeKamar ?? "Tipe tidak tersedia"}
               </span>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex gap-2 items-center">
             <Calendar className="w-4 h-4" />
             <span>Check in: </span>
             <span className="text-sm font-medium text-muted-foreground">
@@ -47,46 +47,46 @@ export default function ReservationsList({
               {formatDate(data.tanggalCheckOut, "LLL dd, y")}
             </span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex gap-2 items-center">
             <Clock className="w-4 h-4" />
             <span>Durasi Menginap: </span>
             <span className="text-sm font-medium text-muted-foreground">
               {data.durasiMenginap} malam
             </span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex gap-2 items-center">
             <User2 className="w-4 h-4" />
             <span>Jumlah Tamu: </span>
             <span className="text-sm font-medium text-muted-foreground">
               3 orang
             </span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex gap-2 items-center">
             <span>Total Pembayaran: </span>
             <span className="text-sm font-medium text-muted-foreground">
               Rp. {formatCurrency(data.Pembayaran.jumlahBayar)}
             </span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex gap-2 items-center">
             <span>Status Pembayaran: </span>
             <span className="text-sm font-medium text-muted-foreground">
               {data.Pembayaran.statusPembayaran}
             </span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex gap-2 items-center">
             <span>Status Pemesanan: </span>
             <span className="text-sm font-medium text-muted-foreground">
               {data.statusReservasi}
             </span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex gap-2 items-center">
             <span>Batas Waktu Bayar: </span>
             <span className="text-sm font-medium text-muted-foreground">
               {formatDate(data.Pembayaran.batasWaktuBayar, "dd MMMM yyyy HH:mm")}
             </span>
           </div>
-          <div className="flex flex-col items-center gap-1 mt-3 lg:hidden">
-            {data.Pembayaran.statusPembayaran === "lunas" && !isOverdue ? (
+          <div className="flex flex-col gap-1 items-center mt-3 lg:hidden">
+            {data.Pembayaran.statusPembayaran === "lunas" ? (
               <Button
                 className="w-full text-white bg-success hover:bg-success/50"
                 onClick={() => navigate(`/reservations/${data.idReservasi}`)}
@@ -111,8 +111,8 @@ export default function ReservationsList({
             </Button>
           </div>
         </div>
-        <div className="flex-col hidden gap-3 lg:my-auto lg:ml-auto lg:flex">
-          {data.Pembayaran.statusPembayaran === "lunas" && !isOverdue ? (
+        <div className="hidden flex-col gap-3 lg:my-auto lg:ml-auto lg:flex">
+          {data.Pembayaran.statusPembayaran === "lunas"  ? (
             <Button
               className="w-full text-white bg-success hover:bg-success/50"
               onClick={() => navigate(`/reservations/${data.idReservasi}`)}
