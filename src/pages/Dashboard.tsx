@@ -1,13 +1,17 @@
 import {
   Activity,
   ArrowUpRight,
-  CircleUser,
   CreditCard,
   DollarSign,
+  Home,
+  LineChart,
   Menu,
+  Package,
   Package2,
   Search,
+  ShoppingCart,
   Users,
+  Users2,
 } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -20,411 +24,192 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { Link } from "react-router-dom";
 import { AvatarDropDown } from "@/components/dropdown/avatar-dropdown";
+import NavbarAdmin from "@/components/navigation/navbarAdmin";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import TableTransactions from "@/components/table/table-transactions";
+import useSWR, { useSWRConfig } from "swr";
+import { analytics, reservasiTypes } from "@/types";
+import axios from "axios";
+import { formatCurrency } from "@/utils/helpers";
 
+  const fetcher = async (url: string) => {
+    try {
+      const { data } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/${url}`);
+      return data.data;
+    } catch (error: any) {
+      throw new Error(`Gagal mengambil data dari server: ${error.response?.statusText || error.message}`);
+    }
+  };
 export function Dashboard() {
+  const { mutate } = useSWRConfig();
+  const {
+    data: Reservasi,
+    error: errorReservasi,
+    isValidating: isLoadingReservasi,
+  } = useSWR<reservasiTypes[]>("successful-reservations", fetcher);
+
+  const {
+    data: analyticsData,
+    error: errorAnalytics,
+    isValidating: isLoadingAnalytics,
+  } = useSWR<analytics>("analytics", fetcher);
+
+ if (isLoadingReservasi || isLoadingAnalytics) return <div>Loading...</div>;
+ if (errorReservasi || errorAnalytics)
+   return (
+     <div>Error: {errorReservasi?.message || errorAnalytics?.message}</div>
+   );
   return (
-    <div className="flex flex-col w-full min-h-screen">
-      <header className="sticky top-0 flex items-center h-16 gap-4 px-4 border-b bg-background md:px-6">
-        <nav className="flex-col hidden gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
-          <Link
-            to="#"
-            className="flex items-center gap-2 text-lg font-semibold md:text-base"
-          >
-            <Package2 className="w-6 h-6" />
-            <span className="sr-only">Acme Inc</span>
-          </Link>
-          <Link
-            to="#"
-            className="transition-colors text-foreground hover:text-foreground"
-          >
-            Dashboard
-          </Link>
-          <Link
-            to="#"
-            className="transition-colors text-muted-foreground hover:text-foreground"
-          >
-            Orders
-          </Link>
-          <Link
-            to="#"
-            className="transition-colors text-muted-foreground hover:text-foreground"
-          >
-            Products
-          </Link>
-          <Link
-            to="#"
-            className="transition-colors text-muted-foreground hover:text-foreground"
-          >
-            Customers
-          </Link>
-          <Link
-            to="#"
-            className="transition-colors text-muted-foreground hover:text-foreground"
-          >
-            Analytics
-          </Link>
-        </nav>
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button
-              variant="outline"
-              size="icon"
-              className="shrink-0 md:hidden"
-            >
-              <Menu className="w-5 h-5" />
-              <span className="sr-only">Toggle navigation menu</span>
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left">
-            <nav className="grid gap-6 text-lg font-medium">
-              <Link
-                to="#"
-                className="flex items-center gap-2 text-lg font-semibold"
+    <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+      <NavbarAdmin />
+      <div className="flex flex-col">
+        <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                className="shrink-0 md:hidden"
               >
-                <Package2 className="w-6 h-6" />
-                <span className="sr-only">Acme Inc</span>
-              </Link>
-              <Link to="#" className="hover:text-foreground">
-                Dashboard
-              </Link>
-              <Link
-                to="#"
-                className="text-muted-foreground hover:text-foreground"
-              >
-                Orders
-              </Link>
-              <Link
-                to="#"
-                className="text-muted-foreground hover:text-foreground"
-              >
-                Products
-              </Link>
-              <Link
-                to="#"
-                className="text-muted-foreground hover:text-foreground"
-              >
-                Customers
-              </Link>
-              <Link
-                to="#"
-                className="text-muted-foreground hover:text-foreground"
-              >
-                Analytics
-              </Link>
-            </nav>
-          </SheetContent>
-        </Sheet>
-        <div className="flex items-center w-full gap-4 md:ml-auto md:gap-2 lg:gap-4">
-          <form className="flex-1 ml-auto sm:flex-initial">
-            <div className="relative">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search products..."
-                className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]"
-              />
-            </div>
-          </form>
-          <AvatarDropDown />
-        </div>
-      </header>
-      <main className="flex flex-col flex-1 gap-4 p-4 md:gap-8 md:p-8">
-        <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
-          <Card x-chunk="dashboard-01-chunk-0">
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-sm font-medium">
-                Total Revenue
-              </CardTitle>
-              <DollarSign className="w-4 h-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">$45,231.89</div>
-              <p className="text-xs text-muted-foreground">
-                +20.1% from last month
-              </p>
-            </CardContent>
-          </Card>
-          <Card x-chunk="dashboard-01-chunk-1">
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-sm font-medium">
-                Subscriptions
-              </CardTitle>
-              <Users className="w-4 h-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">+2350</div>
-              <p className="text-xs text-muted-foreground">
-                +180.1% from last month
-              </p>
-            </CardContent>
-          </Card>
-          <Card x-chunk="dashboard-01-chunk-2">
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-sm font-medium">Sales</CardTitle>
-              <CreditCard className="w-4 h-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">+12,234</div>
-              <p className="text-xs text-muted-foreground">
-                +19% from last month
-              </p>
-            </CardContent>
-          </Card>
-          <Card x-chunk="dashboard-01-chunk-3">
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-sm font-medium">Active Now</CardTitle>
-              <Activity className="w-4 h-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">+573</div>
-              <p className="text-xs text-muted-foreground">
-                +201 since last hour
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-        <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
-          <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
-            <CardHeader className="flex flex-row items-center">
-              <div className="grid gap-2">
-                <CardTitle>Transactions</CardTitle>
-                <CardDescription>
-                  Recent transactions from your store.
-                </CardDescription>
-              </div>
-              <Button asChild size="sm" className="gap-1 ml-auto">
-                <Link to="#">
-                  View All
-                  <ArrowUpRight className="w-4 h-4" />
-                </Link>
+                <Menu className="w-5 h-5" />
+                <span className="sr-only">Toggle navigation menu</span>
               </Button>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Customer</TableHead>
-                    <TableHead className="hidden xl:table-column">
-                      Type
-                    </TableHead>
-                    <TableHead className="hidden xl:table-column">
-                      Status
-                    </TableHead>
-                    <TableHead className="hidden xl:table-column">
-                      Date
-                    </TableHead>
-                    <TableHead className="text-right">Amount</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  <TableRow>
-                    <TableCell>
-                      <div className="font-medium">Liam Johnson</div>
-                      <div className="hidden text-sm text-muted-foreground md:inline">
-                        liam@example.com
-                      </div>
-                    </TableCell>
-                    <TableCell className="hidden xl:table-column">
-                      Sale
-                    </TableCell>
-                    <TableCell className="hidden xl:table-column">
-                      <Badge className="text-xs" variant="outline">
-                        Approved
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                      2023-06-23
-                    </TableCell>
-                    <TableCell className="text-right">$250.00</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <div className="font-medium">Olivia Smith</div>
-                      <div className="hidden text-sm text-muted-foreground md:inline">
-                        olivia@example.com
-                      </div>
-                    </TableCell>
-                    <TableCell className="hidden xl:table-column">
-                      Refund
-                    </TableCell>
-                    <TableCell className="hidden xl:table-column">
-                      <Badge className="text-xs" variant="outline">
-                        Declined
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                      2023-06-24
-                    </TableCell>
-                    <TableCell className="text-right">$150.00</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <div className="font-medium">Noah Williams</div>
-                      <div className="hidden text-sm text-muted-foreground md:inline">
-                        noah@example.com
-                      </div>
-                    </TableCell>
-                    <TableCell className="hidden xl:table-column">
-                      Subscription
-                    </TableCell>
-                    <TableCell className="hidden xl:table-column">
-                      <Badge className="text-xs" variant="outline">
-                        Approved
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                      2023-06-25
-                    </TableCell>
-                    <TableCell className="text-right">$350.00</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <div className="font-medium">Emma Brown</div>
-                      <div className="hidden text-sm text-muted-foreground md:inline">
-                        emma@example.com
-                      </div>
-                    </TableCell>
-                    <TableCell className="hidden xl:table-column">
-                      Sale
-                    </TableCell>
-                    <TableCell className="hidden xl:table-column">
-                      <Badge className="text-xs" variant="outline">
-                        Approved
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                      2023-06-26
-                    </TableCell>
-                    <TableCell className="text-right">$450.00</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <div className="font-medium">Liam Johnson</div>
-                      <div className="hidden text-sm text-muted-foreground md:inline">
-                        liam@example.com
-                      </div>
-                    </TableCell>
-                    <TableCell className="hidden xl:table-column">
-                      Sale
-                    </TableCell>
-                    <TableCell className="hidden xl:table-column">
-                      <Badge className="text-xs" variant="outline">
-                        Approved
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                      2023-06-27
-                    </TableCell>
-                    <TableCell className="text-right">$550.00</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-          <Card x-chunk="dashboard-01-chunk-5">
-            <CardHeader>
-              <CardTitle>Recent Sales</CardTitle>
-            </CardHeader>
-            <CardContent className="grid gap-8">
-              <div className="flex items-center gap-4">
-                <Avatar className="hidden h-9 w-9 sm:flex">
-                  <AvatarImage src="/avatars/01.png" alt="Avatar" />
-                  <AvatarFallback>OM</AvatarFallback>
-                </Avatar>
-                <div className="grid gap-1">
-                  <p className="text-sm font-medium leading-none">
-                    Olivia Martin
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    olivia.martin@email.com
-                  </p>
-                </div>
-                <div className="ml-auto font-medium">+$1,999.00</div>
+            </SheetTrigger>
+            <SheetContent side="left" className="flex flex-col">
+              <nav className="grid gap-2 text-lg font-medium">
+                <Link
+                  to="#"
+                  className="flex gap-2 items-center text-lg font-semibold"
+                >
+                  <Package2 className="w-6 h-6" />
+                  <span className="sr-only">Acme Inc</span>
+                </Link>
+                <Link
+                  to="#"
+                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                >
+                  <Home className="w-5 h-5" />
+                  Dashboard
+                </Link>
+                <Link
+                  to="#"
+                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground"
+                >
+                  <ShoppingCart className="w-5 h-5" />
+                  Orders
+                  <Badge className="flex justify-center items-center ml-auto w-6 h-6 rounded-full shrink-0">
+                    6
+                  </Badge>
+                </Link>
+                <Link
+                  to="#"
+                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                >
+                  <Package className="w-5 h-5" />
+                  Rooms
+                </Link>
+                <Link
+                  to="#"
+                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                >
+                  <Users2 className="w-5 h-5" />
+                  Customers
+                </Link>
+                <Link
+                  to="#"
+                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                >
+                  <LineChart className="w-5 h-5" />
+                  Analytics
+                </Link>
+              </nav>
+            </SheetContent>
+          </Sheet>
+          <div className="flex-1 w-full">
+            <form>
+              <div className="relative">
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="search"
+                  placeholder="Search Rooms..."
+                  className="pl-8 w-full shadow-none appearance-none bg-background md:w-2/3 lg:w-1/3"
+                />
               </div>
-              <div className="flex items-center gap-4">
-                <Avatar className="hidden h-9 w-9 sm:flex">
-                  <AvatarImage src="/avatars/02.png" alt="Avatar" />
-                  <AvatarFallback>JL</AvatarFallback>
-                </Avatar>
-                <div className="grid gap-1">
-                  <p className="text-sm font-medium leading-none">
-                    Jackson Lee
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    jackson.lee@email.com
-                  </p>
+            </form>
+          </div>
+          <AvatarDropDown />
+        </header>
+        <main className="flex flex-col flex-1 gap-4 p-4 md:gap-8 md:p-8">
+          <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+            <Card x-chunk="dashboard-01-chunk-0">
+              <CardHeader className="flex flex-row justify-between items-center pb-2 space-y-0">
+                <CardTitle className="text-sm font-medium">
+                  Total Pendapatan
+                </CardTitle>
+                <DollarSign className="w-4 h-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{formatCurrency(analyticsData?.totalPendapatan ?? 0)}</div>
+              </CardContent>
+            </Card>
+            <Card x-chunk="dashboard-01-chunk-1">
+              <CardHeader className="flex flex-row justify-between items-center pb-2 space-y-0">
+                <CardTitle className="text-sm font-medium">
+                  Total Pengguna
+                </CardTitle>
+                <Users className="w-4 h-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{analyticsData?.totalPengguna ?? 0}</div>
+              </CardContent>
+            </Card>
+            <Card x-chunk="dashboard-01-chunk-2">
+              <CardHeader className="flex flex-row justify-between items-center pb-2 space-y-0">
+                <CardTitle className="text-sm font-medium">Total Reservasi</CardTitle>
+                <CreditCard className="w-4 h-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{analyticsData?.totalReservasi ?? 0}</div>
+              </CardContent>
+            </Card>
+            <Card x-chunk="dashboard-01-chunk-3">
+              <CardHeader className="flex flex-row justify-between items-center pb-2 space-y-0">
+                <CardTitle className="text-sm font-medium">
+                  Total Kamar
+                </CardTitle>
+                <Activity className="w-4 h-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">+573</div>
+              </CardContent>
+            </Card>
+          </div>
+          <div className="w-full">
+            <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
+              <CardHeader className="flex flex-row items-center">
+                <div className="grid gap-2">
+                  <CardTitle>Transactions</CardTitle>
+                  <CardDescription>
+                    Transaksi terbaru dari Perhotelan Anda.
+                  </CardDescription>
                 </div>
-                <div className="ml-auto font-medium">+$39.00</div>
-              </div>
-              <div className="flex items-center gap-4">
-                <Avatar className="hidden h-9 w-9 sm:flex">
-                  <AvatarImage src="/avatars/03.png" alt="Avatar" />
-                  <AvatarFallback>IN</AvatarFallback>
-                </Avatar>
-                <div className="grid gap-1">
-                  <p className="text-sm font-medium leading-none">
-                    Isabella Nguyen
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    isabella.nguyen@email.com
-                  </p>
-                </div>
-                <div className="ml-auto font-medium">+$299.00</div>
-              </div>
-              <div className="flex items-center gap-4">
-                <Avatar className="hidden h-9 w-9 sm:flex">
-                  <AvatarImage src="/avatars/04.png" alt="Avatar" />
-                  <AvatarFallback>WK</AvatarFallback>
-                </Avatar>
-                <div className="grid gap-1">
-                  <p className="text-sm font-medium leading-none">
-                    William Kim
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    will@email.com
-                  </p>
-                </div>
-                <div className="ml-auto font-medium">+$99.00</div>
-              </div>
-              <div className="flex items-center gap-4">
-                <Avatar className="hidden h-9 w-9 sm:flex">
-                  <AvatarImage src="/avatars/05.png" alt="Avatar" />
-                  <AvatarFallback>SD</AvatarFallback>
-                </Avatar>
-                <div className="grid gap-1">
-                  <p className="text-sm font-medium leading-none">
-                    Sofia Davis
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    sofia.davis@email.com
-                  </p>
-                </div>
-                <div className="ml-auto font-medium">+$39.00</div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </main>
+                <Button asChild size="sm" className="gap-1 ml-auto">
+                  <Link to="#">
+                    View All
+                    <ArrowUpRight className="w-4 h-4" />
+                  </Link>
+                </Button>
+              </CardHeader>
+              <CardContent>
+                <TableTransactions data={Reservasi} />
+              </CardContent>
+            </Card>
+          </div>
+        </main>
+      </div>
     </div>
   );
 }
