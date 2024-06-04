@@ -1,19 +1,13 @@
 import {
-  ChevronLeft,
-  ChevronRight,
-  Copy,
-  CreditCard,
   File,
   Home,
   LineChart,
   ListFilter,
   Menu,
-  MoreVertical,
   Package,
   Package2,
   Search,
   ShoppingCart,
-  Truck,
   Users2,
 } from "lucide-react";
 
@@ -23,7 +17,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -31,19 +24,11 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-} from "@/components/ui/pagination";
-import { Progress } from "@/components/ui/progress";
-import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
@@ -55,6 +40,8 @@ import axios from "axios";
 import { Resevasi, reservasiTypes } from "@/types";
 import { useEffect, useState } from "react";
 import CardOrder from "@/components/card/card-order";
+import * as XLSX from "xlsx";
+import { id } from "date-fns/locale";
 
 export function OrdersPage() {
   const { mutate } = useSWRConfig();
@@ -84,6 +71,31 @@ export function OrdersPage() {
 
   if (error) return <div>failed to load</div>;
   if (isLoading) return <div>loading...</div>;
+
+  const cleanDataForExport = (data: reservasiTypes[]) => {
+    return data
+      .filter((item) => !!(item.tamu && item.Pembayaran))
+      .map((item, index) => ({
+        ...item,
+        no: index + 1,
+        idReservasi: item.idReservasi || "N/A",
+        idTamu: item.tamu.idTamu || "N/A",
+        idPembayaran: item.Pembayaran.idPembayaran || "N/A",
+        idKamar: item.kamar.idKamar || "N/A",
+        emailTamu: item.tamu.emailTamu || "N/A",
+        namaTamu: item.tamu.namaTamu || "N/A",
+        tanggalCheckIn: item.tanggalCheckIn || "N/A",
+        tanggalCheckOut: item.tanggalCheckOut || "N/A",
+        statusPembayaran: item.Pembayaran.statusPembayaran || "N/A",
+      }));
+  };
+  const exportToExcel = () => {
+    const cleanedData = cleanDataForExport(data?.datas || []);
+    const ws = XLSX.utils.json_to_sheet(cleanedData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Data Reservasi");
+    XLSX.writeFile(wb, "data_reservasi.xlsx");
+  };
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <NavbarAdmin />
@@ -104,7 +116,7 @@ export function OrdersPage() {
               <nav className="grid gap-2 text-lg font-medium">
                 <Link
                   to="#"
-                  className="flex items-center gap-2 text-lg font-semibold"
+                  className="flex gap-2 items-center text-lg font-semibold"
                 >
                   <Package2 className="w-6 h-6" />
                   <span className="sr-only">Acme Inc</span>
@@ -122,7 +134,7 @@ export function OrdersPage() {
                 >
                   <ShoppingCart className="w-5 h-5" />
                   Orders
-                  <Badge className="flex items-center justify-center w-6 h-6 ml-auto rounded-full shrink-0">
+                  <Badge className="flex justify-center items-center ml-auto w-6 h-6 rounded-full shrink-0">
                     6
                   </Badge>
                 </Link>
@@ -157,58 +169,15 @@ export function OrdersPage() {
                 <Input
                   type="search"
                   placeholder="Search Rooms..."
-                  className="w-full pl-8 shadow-none appearance-none bg-background md:w-2/3 lg:w-1/3"
+                  className="pl-8 w-full shadow-none appearance-none bg-background md:w-2/3 lg:w-1/3"
                 />
               </div>
             </form>
           </div>
           <AvatarDropDown />
         </header>
-        <main className="grid items-start flex-1 gap-4 p-4 mt-5 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
-          <div className="grid items-start gap-4 auto-rows-max md:gap-8 lg:col-span-2">
-            <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
-              <Card className="sm:col-span-2" x-chunk="dashboard-05-chunk-0">
-                <CardHeader className="pb-3">
-                  <CardTitle>Reservasi Anda</CardTitle>
-                  <CardDescription className="max-w-lg leading-relaxed text-balance">
-                    Memperkenalkan Dashboard Reservasi Dinamis Kami untuk
-                    Manajemen yang Mudah dan Analisis yang Mendalam.
-                  </CardDescription>
-                </CardHeader>
-                <CardFooter>
-                  <Button>Buat Reservasi Baru</Button>
-                </CardFooter>
-              </Card>
-              <Card x-chunk="dashboard-05-chunk-1">
-                <CardHeader className="pb-2">
-                  <CardDescription>Minggu Ini</CardDescription>
-                  <CardTitle className="text-4xl">$1,329</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-xs text-muted-foreground">
-                    +25% dari minggu lalu
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Progress value={25} aria-label="Peningkatan 25%" />
-                </CardFooter>
-              </Card>
-
-              <Card x-chunk="dashboard-05-chunk-2">
-                <CardHeader className="pb-2">
-                  <CardDescription>Bulan Ini</CardDescription>
-                  <CardTitle className="text-4xl">$5,329</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-xs text-muted-foreground">
-                    +10% dari bulan lalu
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Progress value={12} aria-label="Peningkatan 12%" />
-                </CardFooter>
-              </Card>
-            </div>
+        <main className="grid flex-1 gap-4 items-start p-4 mt-5 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
+          <div className="grid auto-rows-max gap-4 items-start md:gap-8 lg:col-span-2">
             <Tabs defaultValue="week">
               <div className="flex items-center">
                 <TabsList>
@@ -216,13 +185,13 @@ export function OrdersPage() {
                   <TabsTrigger value="month">Month</TabsTrigger>
                   <TabsTrigger value="year">Year</TabsTrigger>
                 </TabsList>
-                <div className="flex items-center gap-2 ml-auto">
+                <div className="flex gap-2 items-center ml-auto">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button
                         variant="outline"
                         size="sm"
-                        className="gap-1 text-sm h-7"
+                        className="gap-1 h-7 text-sm"
                       >
                         <ListFilter className="h-3.5 w-3.5" />
                         <span className="sr-only sm:not-sr-only">Filter</span>
@@ -245,7 +214,8 @@ export function OrdersPage() {
                   <Button
                     size="sm"
                     variant="outline"
-                    className="gap-1 text-sm h-7"
+                    className="gap-1 h-7 text-sm"
+                    onClick={exportToExcel}
                   >
                     <File className="h-3.5 w-3.5" />
                     <span className="sr-only sm:not-sr-only">Export</span>
