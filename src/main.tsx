@@ -21,6 +21,7 @@ import AuthRoute from "./middlewares/auth-route.tsx";
 import EditRoomPage from "./pages/EditRoomPage.tsx";
 import { OrdersPage } from "./pages/OrdersPage.tsx";
 import { Dashboard } from "./pages/Dashboard.tsx";
+import { CustumersPage } from "./pages/CustumersPage.tsx";
 
 axios.defaults.withCredentials = true;
 
@@ -63,7 +64,7 @@ const router = createBrowserRouter([
       <AuthRoute adminOnly={true}>
         <Dashboard />
       </AuthRoute>
-    )
+    ),
   },
   {
     path: "admin/rooms",
@@ -71,7 +72,7 @@ const router = createBrowserRouter([
       <AuthRoute adminOnly={true}>
         <DashBoardRoomsPage />
       </AuthRoute>
-    )
+    ),
   },
   {
     path: "admin/orders",
@@ -79,12 +80,12 @@ const router = createBrowserRouter([
       <AuthRoute adminOnly={true}>
         <OrdersPage />
       </AuthRoute>
-    )
+    ),
   },
   {
     path: "admin/rooms/create",
     element: (
-      <AuthRoute adminOnly={true} >
+      <AuthRoute adminOnly={true}>
         <CreateRoomPage />
       </AuthRoute>
     ),
@@ -95,8 +96,16 @@ const router = createBrowserRouter([
       <AuthRoute adminOnly={true}>
         <EditRoomPage />
       </AuthRoute>
-    )
-  }
+    ),
+  },
+  {
+    path: "admin/customers",
+    element: (
+      <AuthRoute adminOnly={true}>
+        <CustumersPage />
+      </AuthRoute>
+    ),
+  },
 ]);
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
