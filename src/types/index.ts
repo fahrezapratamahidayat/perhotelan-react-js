@@ -1,5 +1,6 @@
 
 import { type ClientUploadedFileData } from "uploadthing/types"
+import { string } from "zod";
 
 export interface UploadedFile<T = unknown> extends ClientUploadedFileData<T> { }
 
@@ -26,7 +27,7 @@ export interface Rooms {
     namaKamar: string;
     ukuranKamar: string;
     hargaKamar: number;
-    tipeKamar: "Standard" | "Deluxe" | "Suite" | "Premium";
+    tipeKamar: "Standar" | "Deluxe" | "Suite" | "Premium";
     ratingKamar: number;
     diskonKamar: any;
     statusKamar: "Tersedia" | "TidakTersedia" | "SedangDiperbaiki" | "Dipesan" | "Lainnya";
@@ -54,11 +55,12 @@ export interface detailRoom {
     namaKamar: string;
     ukuranKamar: string;
     hargaKamar: number;
-    tipeKamar: "Standard" | "Deluxe" | "Suite" | "Premium";
+    tipeKamar: "Standar" | "Deluxe" | "Suite" | "Premium";
     ratingKamar: number;
     diskonKamar: any;
     statusKamar: "Tersedia" | "TidakTersedia" | "SedangDiperbaiki" | "Dipesan" | "Lainnya";
     Gambar: Image[]
+    Komentar: Komentar[]
 }
 
 
@@ -121,7 +123,7 @@ export interface Kamar {
     namaKamar: string;
     ukuranKamar: string;
     hargaKamar: number;
-    tipeKamar: "Standard" | "Deluxe" | "Suite" | "Premium";
+    tipeKamar: "Standar" | "Deluxe" | "Suite" | "Premium";
     ratingKamar: number;
     diskonKamar: any;
     statusKamar: "Tersedia" | "Tidak Tersedia" | "Sedang Diperbaiki" | "Dipesan" | "Lainnya";
@@ -152,5 +154,22 @@ export type analytics = {
     totalPendapatan: number;
     totalPengguna: number;
     totalReservasi: number
+    totalKamar: number
+}
+
+
+export type Komentar = {
+    idKomentar: number;
+    idTamu: number;
+    idKamar: number;
+    TipeKomentar: "Kamar" | "Hotel"
+    jumlahLike: number;
+    Komentar: string;
+    tanggalDibuat: any;
+    tamu: {
+        namaTamu: string
+        kota: string;
+        provinsi: string
+    }
 }
 
