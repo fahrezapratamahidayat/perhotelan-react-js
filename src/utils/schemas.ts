@@ -77,8 +77,13 @@ export const schemasCreateRoom  = z.object({
   namaKamar: z.string().min(1, "Nama kamar harus diisi."),
   descriptionKamar: z.string().min(1, "Deskripsi kamar harus diisi."),
   ukuranKamar: z.string().min(1, "Ukuran kamar harus diisi."),
-  typeKamar: z.enum(["Standard", "Deluxe", "Suite", "Premium"]).refine(val => ["Standard", "Deluxe", "Suite", "Premium"].includes(val), { message: "Priority is required" }),
+  typeKamar: z.enum(["Standar", "Deluxe", "Suite", "Premium"]).refine(val => ["Standar", "Deluxe", "Suite", "Premium"].includes(val), { message: "Tipe Kamar harus di isi" }),
   diskonKamar: z.string().optional(),
-  statusKamar: z.enum(["Tersedia", "TidakTersedia", "SedangDiperbaiki", "Dipesan", "Lainnya"]).refine(val => ["Tersedia", "TidakTersedia", "SedangDiperbaiki", "Dipesan", "Lainnya"].includes(val), { message: "Priority is required" }),
+  statusKamar: z.enum(["Tersedia", "TidakTersedia", "SedangDiperbaiki", "Dipesan", "Lainnya"]).refine(val => ["Tersedia", "TidakTersedia", "SedangDiperbaiki", "Dipesan", "Lainnya"].includes(val), { message: "Status Kamar Harus Di isi" }),
   images: z.array(z.instanceof(File)),
 });
+
+
+export const schemasComments = z.object({
+  comments: z.string().min(1, "komentar harus di isi")
+})
