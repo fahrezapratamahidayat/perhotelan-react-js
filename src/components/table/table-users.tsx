@@ -31,8 +31,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, ChevronDown, Clipboard, ClipboardCheck, MoreHorizontal, User2 } from "lucide-react";
 import React from "react";
+import { toast,Toaster} from "sonner";
+import { useToast } from "../ui/use-toast";
 
 export const columns: ColumnDef<Tamu>[] = [
   {
@@ -59,19 +61,19 @@ export const columns: ColumnDef<Tamu>[] = [
   },
   {
     accessorKey: "namaTamu",
-    header: ({ column }) => <div className="text-right">Nama</div>,
+    header: ({ column }) => <div className="text-left">Nama</div>,
     cell: ({ row }) => {
       return (
-        <div className="font-medium text-right">{row.getValue("namaTamu")}</div>
+        <div className="font-medium text-left">{row.getValue("namaTamu")}</div>
       );
     },
   },
   {
     accessorKey: "nomorTeleponTamu",
-    header: ({ column }) => <div className="text-right">No Telp</div>,
+    header: ({ column }) => <div className="text-left">No Telp</div>,
     cell: ({ row }) => {
       return (
-        <div className="font-medium text-right">
+        <div className="font-medium text-left">
           {row.getValue("nomorTeleponTamu")}
         </div>
       );
@@ -96,10 +98,10 @@ export const columns: ColumnDef<Tamu>[] = [
   },
   {
     accessorKey: "peranTamu",
-    header: () => <div className="text-right">Role</div>,
+    header: () => <div className="text-left">Role</div>,
     cell: ({ row }) => {
       return (
-        <div className="font-medium text-right">
+        <div className="font-medium text-left">
           {row.getValue("peranTamu")}
         </div>
       );
@@ -122,11 +124,18 @@ export const columns: ColumnDef<Tamu>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() =>
-                navigator.clipboard.writeText(payment.nomorTeleponTamu)
+              onClick={() => {
+                 navigator.clipboard.writeText(payment.idTamu.toString());
+                toast("Copied to clipboard", {
+                  duration: 2000,
+                  position: "bottom-right",
+                  icon: <ClipboardCheck className="w-4 h-4 mr-2" />,
+                });
+              }
               }
             >
-              Copy payment ID
+              <Clipboard className="w-4 h-4 mr-2" />
+              Copy User ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>View customer</DropdownMenuItem>
@@ -154,6 +163,7 @@ export default function TableUsers<TData, TValue>({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+  
   const table = useReactTable({
     data,
     columns,
@@ -178,13 +188,12 @@ export default function TableUsers<TData, TValue>({
       <div className="w-full">
         <div className="flex items-center py-4">
           <Input
-            placeholder="Cari nomor email"
-            value={
-              (table.getColumn("emailTamu")?.getFilterValue() as string) ?? ""
-            }
-            onChange={(event) =>
-              table.getColumn("emailTamu")?.setFilterValue(event.target.value)
-            }
+            placeholder="Cari pengguna"
+            value={(table.getState().globalFilter as string) ?? ""}
+            onChange={(event) => {
+              const value = event.target.value;
+              table.setGlobalFilter(value);
+            }}
             className="max-w-sm"
           />
           <DropdownMenu>

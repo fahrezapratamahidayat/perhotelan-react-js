@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react"
+import { Toaster } from "sonner"
 
 type Theme = "dark" | "light" | "system"
 
@@ -58,9 +59,10 @@ export function ThemeProvider({
 
   return (
     <ThemeProviderContext.Provider {...props} value={value}>
+      <Toaster />
       {children}
     </ThemeProviderContext.Provider>
-  )
+  );
 }
 
 export const useTheme = () => {

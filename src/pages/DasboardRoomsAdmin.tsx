@@ -29,7 +29,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Link, useNavigate } from "react-router-dom";
 import useSWR, { useSWRConfig } from "swr";
 import axios from "axios";
-import TableRooms from "@/components/(admin)/table-data/table-rooms";
+import TableRooms, { columns } from "@/components/(admin)/table-data/table-rooms";
 import { AvatarDropDown } from "@/components/dropdown/avatar-dropdown";
 import NavbarAdmin from "@/components/navigation/navbarAdmin";
 import { NavbarMobile } from "@/components/navigation/nvabar-mobile";
@@ -39,7 +39,9 @@ export function DashBoardRoomsPage() {
 
   const fetcher = async () => {
     const params = { statuskamar: "reserved" };
-    const response = await axios.get("http://localhost:3000/api/rooms", {params});
+    const response = await axios.get("http://localhost:3000/api/rooms", {
+      params,
+    });
     return response.data;
   };
   const navigate = useNavigate();
@@ -54,17 +56,9 @@ export function DashBoardRoomsPage() {
         <NavbarMobile />
         <main className="grid flex-1 gap-4 items-start p-4 mt-5 sm:px-6 sm:py-0 md:gap-8">
           {data.data && data.data.length > 0 ? (
-            <Tabs defaultValue="all">
-              <div className="flex items-center">
-                <TabsList>
-                  <TabsTrigger value="all">All</TabsTrigger>
-                  <TabsTrigger value="Dipesan">Dipesan</TabsTrigger>
-                  <TabsTrigger value="draft">Draft</TabsTrigger>
-                  <TabsTrigger value="archived" className="hidden sm:flex">
-                    Archived
-                  </TabsTrigger>
-                </TabsList>
-                <div className="flex gap-2 items-center ml-auto">
+            <div defaultValue="flex">
+              {/* <div className="flex items-center">
+                <div className="flex gap-2 items-center mb-3 ml-auto">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="outline" size="sm" className="gap-1 h-8">
@@ -103,14 +97,9 @@ export function DashBoardRoomsPage() {
                     </span>
                   </Button>
                 </div>
-              </div>
-              <TabsContent value="all">
-                <TableRooms data={data} />
-              </TabsContent>
-              <TabsContent value="Dipesan">
-                <TableRooms data={data} />
-              </TabsContent>
-            </Tabs>
+              </div> */}
+              <TableRooms data={data.data} columns={columns} />
+            </div>
           ) : (
             <div
               className="flex flex-1 justify-center items-center h-full rounded-lg border border-dashed shadow-sm"
@@ -123,7 +112,12 @@ export function DashBoardRoomsPage() {
                 <p className="text-sm text-muted-foreground">
                   Anda dapat mulai menjual begitu Anda menambahkan produk.
                 </p>
-                <Button className="mt-4" onClick={() => navigate("/admin/rooms/create")}>Tambah Kamar</Button>
+                <Button
+                  className="mt-4"
+                  onClick={() => navigate("/admin/rooms/create")}
+                >
+                  Tambah Kamar
+                </Button>
               </div>
             </div>
           )}

@@ -183,7 +183,7 @@ export function Dashboard() {
                 <Activity className="w-4 h-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">+573</div>
+                <div className="text-2xl font-bold">{analyticsData?.totalKamar}</div>
               </CardContent>
             </Card>
           </div>

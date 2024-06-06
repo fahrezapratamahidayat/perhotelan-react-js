@@ -80,9 +80,9 @@ export function FormCreateRoom() {
         title: "Success",
         description: response.data.msg,
         duration: 3000,
-      })
+      });
 
-      navigate("/admin/rooms")
+      navigate("/admin/rooms");
     } catch (error: AxiosError | any) {
       toast({
         title: "Something went wrong",
@@ -113,8 +113,13 @@ export function FormCreateRoom() {
                         <FormItem>
                           <FormLabel>Nama Kamar</FormLabel>
                           <FormControl>
-                            <Input placeholder="Nama Kamar" {...field} />
+                            <Input
+                              placeholder="Nama Kamar"
+                              {...field}
+                              autoComplete="off"
+                            />
                           </FormControl>
+                          <FormMessage />
                         </FormItem>
                       )}
                     />
@@ -132,6 +137,7 @@ export function FormCreateRoom() {
                               className="min-h-20"
                             />
                           </FormControl>
+                          <FormMessage />
                         </FormItem>
                       )}
                     />
@@ -144,6 +150,7 @@ export function FormCreateRoom() {
                           <FormControl>
                             <Input placeholder="Ukuran Kamar" {...field} />
                           </FormControl>
+                          <FormMessage />
                         </FormItem>
                       )}
                     />
@@ -162,7 +169,7 @@ export function FormCreateRoom() {
                                 <SelectValue placeholder="Pilih type Kamar" />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="Standard">
+                                <SelectItem value="Standar">
                                   Standard
                                 </SelectItem>
                                 <SelectItem value="Deluxe">Deluxe</SelectItem>
@@ -171,6 +178,7 @@ export function FormCreateRoom() {
                               </SelectContent>
                             </Select>
                           </FormControl>
+                          <FormMessage />
                         </FormItem>
                       )}
                     />
@@ -181,8 +189,13 @@ export function FormCreateRoom() {
                         <FormItem>
                           <FormLabel>Diskon Kamar (optional)</FormLabel>
                           <FormControl>
-                            <Input placeholder="Diskon Kamar" {...field} />
+                            <Input
+                              placeholder="Diskon Kamar"
+                              {...field}
+                              type="number"
+                            />
                           </FormControl>
+                          <FormMessage />
                         </FormItem>
                       )}
                     />
@@ -217,6 +230,7 @@ export function FormCreateRoom() {
                             </SelectContent>
                           </Select>
                         </FormControl>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -240,6 +254,7 @@ export function FormCreateRoom() {
                     name="images"
                     render={({ field }) => (
                       <FormItem>
+                        <FormLabel></FormLabel>
                         <FormControl>
                           <div className="space-y-6">
                             <FileUploader
@@ -249,7 +264,7 @@ export function FormCreateRoom() {
                                 setFiles(newFiles);
                               }}
                               maxFiles={5}
-                              maxSize={1024 * 1024 * 5}
+                              maxSize={1024 * 1024 * 10}
                               accept={{ "image/*": [] }}
                               multiple={true}
                             />

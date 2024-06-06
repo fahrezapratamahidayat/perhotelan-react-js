@@ -20,8 +20,8 @@ interface CardHotelProps {
 export function CardHotel({ data, className }: CardHotelProps) {
   return (
     <Card>
-      <div className="overflow-hidden transition-shadow rounded-lg shadow-lg ">
-        <div className="relative overflow-hidden transition duration-1000 transform group">
+      <div className="overflow-hidden rounded-lg shadow-lg transition-shadow">
+        <div className="overflow-hidden relative transition duration-1000 transform group">
           <img
             alt="Hotel Image"
             className="object-cover w-full h-56 transition-transform group-hover:scale-105"
@@ -36,10 +36,10 @@ export function CardHotel({ data, className }: CardHotelProps) {
           {/* <div className="absolute top-0 left-0 w-full h-full">
             <h1>test</h1>`
           </div> */}
-          <div className="absolute left-0 flex items-center justify-center w-full h-full cursor-pointer -bottom-full bg-black/50 backdrop-blur-sm group-hover:bottom-0"></div>
+          <div className="flex absolute left-0 -bottom-full justify-center items-center w-full h-full backdrop-blur-sm cursor-pointer bg-black/50 group-hover:bottom-0"></div>
         </div>
         <CardContent className="p-4">
-          <div className="flex items-center justify-between mb-1">
+          <div className="flex justify-between items-center mb-1">
             <span className="text-xl font-semibold">{data.namaKamar}</span>
           </div>
           <div className="flex items-center mb-2">
@@ -58,11 +58,10 @@ export function CardHotel({ data, className }: CardHotelProps) {
             </span>
           </div>
           <p className="mb-4 text-muted-foreground line-clamp-2">
-            Luxurious beachfront resort with private beach access and
-            world-class spa.
+            {data.deskripsiKamar}
           </p>
           <div className="flex flex-col">
-            <div className="flex items-center gap-x-1">
+            <div className="flex gap-x-1 items-center">
               <span className="text-base font-semibold">
                 Rp. {""}
                 {formatCurrency(data.hargaKamar * (1 - data.diskonKamar / 100))}
@@ -73,7 +72,7 @@ export function CardHotel({ data, className }: CardHotelProps) {
           <Link
             to={`/rooms/${data.idKamar}?name=${data.namaKamar}&type=${data.tipeKamar}`}
           >
-            <Button className="w-full mt-3">Lihat Detail</Button>
+            <Button className="mt-3 w-full">Lihat Detail</Button>
           </Link>
         </CardContent>
       </div>

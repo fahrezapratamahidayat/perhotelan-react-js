@@ -56,60 +56,7 @@ export function CustumersPage() {
       <div className="flex flex-col">
         <NavbarMobile />
         <main className="grid flex-1 gap-4 items-start p-4 mt-5 sm:px-6 sm:py-0 md:gap-8">
-                      <Tabs defaultValue="all">
-              <div className="flex items-center">
-                <TabsList>
-                  <TabsTrigger value="all">All</TabsTrigger>
-                  <TabsTrigger value="Dipesan">Dipesan</TabsTrigger>
-                  <TabsTrigger value="draft">Draft</TabsTrigger>
-                  <TabsTrigger value="archived" className="hidden sm:flex">
-                    Archived
-                  </TabsTrigger>
-                </TabsList>
-                <div className="flex gap-2 items-center ml-auto">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="outline" size="sm" className="gap-1 h-8">
-                        <ListFilter className="h-3.5 w-3.5" />
-                        <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                          Filter
-                        </span>
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuLabel>Filter by</DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuCheckboxItem checked>
-                        Active
-                      </DropdownMenuCheckboxItem>
-                      <DropdownMenuCheckboxItem>Draft</DropdownMenuCheckboxItem>
-                      <DropdownMenuCheckboxItem>
-                        Archived
-                      </DropdownMenuCheckboxItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                  <Button size="sm" variant="outline" className="gap-1 h-8">
-                    <File className="h-3.5 w-3.5" />
-                    <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                      Export
-                    </span>
-                  </Button>
-                  <Button
-                    size="sm"
-                    className="gap-1 h-8"
-                    onClick={() => navigate("/admin/rooms/create")}
-                  >
-                    <PlusCircle className="h-3.5 w-3.5" />
-                    <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                      Tambah Kamar
-                    </span>
-                  </Button>
-                </div>
-              </div>
-              <TabsContent value="all">
-                <TableUsers data={data} columns={columns}/>
-              </TabsContent>
-            </Tabs>
+          <TableUsers data={data} columns={columns} />
         </main>
       </div>
     </div>
