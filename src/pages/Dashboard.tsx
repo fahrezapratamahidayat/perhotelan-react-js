@@ -31,9 +31,10 @@ import NavbarAdmin from "@/components/navigation/navbarAdmin";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import TableTransactions from "@/components/table/table-transactions";
 import useSWR, { useSWRConfig } from "swr";
-import { analytics, reservasiTypes } from "@/types";
+import { analytics, analyticsmonthly, reservasiTypes } from "@/types";
 import axios from "axios";
 import { formatCurrency } from "@/utils/helpers";
+import { Overview } from "@/components/card/card-analytics";
 
   const fetcher = async (url: string) => {
     try {
@@ -56,9 +57,14 @@ export function Dashboard() {
     error: errorAnalytics,
     isValidating: isLoadingAnalytics,
   } = useSWR<analytics>("analytics", fetcher);
+  const {
+    data: analyticsMonthlyData,
+    error: errorAnalyticsMonthly,
+    isValidating: isLoadingAnalyticsMonthly,
+  } = useSWR<analyticsmonthly>("analytics/monthly-revenue", fetcher);
 
- if (isLoadingReservasi || isLoadingAnalytics) return <div>Loading...</div>;
- if (errorReservasi || errorAnalytics)
+ if (isLoadingReservasi || isLoadingAnalytics || isLoadingAnalyticsMonthly) return <div>Loading...</div>;
+ if (errorReservasi || errorAnalytics || errorAnalyticsMonthly)
    return (
      <div>Error: {errorReservasi?.message || errorAnalytics?.message}</div>
    );
@@ -142,8 +148,8 @@ export function Dashboard() {
           </div>
           <AvatarDropDown />
         </header>
-        <main className="flex flex-col flex-1 gap-4 p-4 md:gap-8 md:p-8">
-          <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+        <main className="flex-1 space-y-4 p-8 pt-6">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <Card x-chunk="dashboard-01-chunk-0">
               <CardHeader className="flex flex-row justify-between items-center pb-2 space-y-0">
                 <CardTitle className="text-sm font-medium">
@@ -152,7 +158,9 @@ export function Dashboard() {
                 <DollarSign className="w-4 h-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{formatCurrency(analyticsData?.totalPendapatan ?? 0)}</div>
+                <div className="text-2xl font-bold">
+                  {formatCurrency(analyticsData?.totalPendapatan ?? 0)}
+                </div>
               </CardContent>
             </Card>
             <Card x-chunk="dashboard-01-chunk-1">
@@ -163,16 +171,22 @@ export function Dashboard() {
                 <Users className="w-4 h-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{analyticsData?.totalPengguna ?? 0}</div>
+                <div className="text-2xl font-bold">
+                  {analyticsData?.totalPengguna ?? 0}
+                </div>
               </CardContent>
             </Card>
             <Card x-chunk="dashboard-01-chunk-2">
               <CardHeader className="flex flex-row justify-between items-center pb-2 space-y-0">
-                <CardTitle className="text-sm font-medium">Total Reservasi</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Total Reservasi
+                </CardTitle>
                 <CreditCard className="w-4 h-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{analyticsData?.totalReservasi ?? 0}</div>
+                <div className="text-2xl font-bold">
+                  {analyticsData?.totalReservasi ?? 0}
+                </div>
               </CardContent>
             </Card>
             <Card x-chunk="dashboard-01-chunk-3">
@@ -183,12 +197,25 @@ export function Dashboard() {
                 <Activity className="w-4 h-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{analyticsData?.totalKamar}</div>
+                <div className="text-2xl font-bold">
+                  {analyticsData?.totalKamar}
+                </div>
               </CardContent>
             </Card>
           </div>
-          <div className="w-full">
-            <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+            <Card className="col-span-4">
+              <CardHeader>
+                <CardTitle>Overview</CardTitle>
+              </CardHeader>
+              <CardContent className="pl-2">
+                <Overview data={analyticsMonthlyData as undefined} />
+              </CardContent>
+            </Card>
+            <Card
+              className="lg:col-span-3 col-span-4"
+              x-chunk="dashboard-01-chunk-4"
+            >
               <CardHeader className="flex flex-row items-center">
                 <div className="grid gap-2">
                   <CardTitle>Transactions</CardTitle>
@@ -203,7 +230,7 @@ export function Dashboard() {
                   </Link>
                 </Button>
               </CardHeader>
-              <CardContent>
+              <CardContent className="max-w-lg">
                 <TableTransactions data={Reservasi} />
               </CardContent>
             </Card>
