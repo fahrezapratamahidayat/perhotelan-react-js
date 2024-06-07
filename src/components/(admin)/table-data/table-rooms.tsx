@@ -170,7 +170,7 @@ export const columns: ColumnDef<Rooms>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       // eslint-disable-next-line react-hooks/rules-of-hooks
-      const { handleDelete,handleEdit, handleView } = useRoomManagement(); // Menggunakan hook di sini
+      const { handleDelete,handleEdit, handleView } = useRoomManagement();
       const room = row.original;
       const roomId = room.idKamar;
       return (
