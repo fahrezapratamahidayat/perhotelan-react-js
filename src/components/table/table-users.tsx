@@ -31,10 +31,22 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { ArrowUpDown, ChevronDown, Clipboard, ClipboardCheck, MoreHorizontal, User2 } from "lucide-react";
+import {
+  ArrowUpDown,
+  ChevronDown,
+  Clipboard,
+  ClipboardCheck,
+  MoreHorizontal,
+} from "lucide-react";
 import React from "react";
-import { toast,Toaster} from "sonner";
-import { useToast } from "../ui/use-toast";
+import { toast } from "sonner";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
 
 export const columns: ColumnDef<Tamu>[] = [
   {
@@ -101,9 +113,7 @@ export const columns: ColumnDef<Tamu>[] = [
     header: () => <div className="text-left">Role</div>,
     cell: ({ row }) => {
       return (
-        <div className="font-medium text-left">
-          {row.getValue("peranTamu")}
-        </div>
+        <div className="font-medium text-left">{row.getValue("peranTamu")}</div>
       );
     },
   },
@@ -125,14 +135,13 @@ export const columns: ColumnDef<Tamu>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() => {
-                 navigator.clipboard.writeText(payment.idTamu.toString());
+                navigator.clipboard.writeText(payment.idTamu.toString());
                 toast("Copied to clipboard", {
                   duration: 2000,
                   position: "bottom-right",
                   icon: <ClipboardCheck className="w-4 h-4 mr-2" />,
                 });
-              }
-              }
+              }}
             >
               <Clipboard className="w-4 h-4 mr-2" />
               Copy User ID
@@ -163,7 +172,7 @@ export default function TableUsers<TData, TValue>({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
-  
+
   const table = useReactTable({
     data,
     columns,
@@ -185,45 +194,49 @@ export default function TableUsers<TData, TValue>({
 
   return (
     <>
-      <div className="w-full">
-        <div className="flex items-center py-4">
-          <Input
-            placeholder="Cari pengguna"
-            value={(table.getState().globalFilter as string) ?? ""}
-            onChange={(event) => {
-              const value = event.target.value;
-              table.setGlobalFilter(value);
-            }}
-            className="max-w-sm"
-          />
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto">
-                Columns <ChevronDown className="ml-2 w-4 h-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {table
-                .getAllColumns()
-                .filter((column) => column.getCanHide())
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                      }
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  );
-                })}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-        <div className="rounded-md border">
+      <Card x-chunk="dashboard-05-chunk-5">
+        <CardHeader className="px-7">
+          <CardTitle>Pengguna</CardTitle>
+          <CardDescription>Pengguna Di Aplikasi Hotel Anda.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-wrap gap-2 pb-4 lg:flex-row lg:items-center">
+            <Input
+              placeholder="Cari pengguna"
+              value={(table.getState().globalFilter as string) ?? ""}
+              onChange={(event) => {
+                const value = event.target.value;
+                table.setGlobalFilter(value);
+              }}
+              className="max-w-sm"
+            />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="ml-auto">
+                  Columns <ChevronDown className="ml-2 w-4 h-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {table
+                  .getAllColumns()
+                  .filter((column) => column.getCanHide())
+                  .map((column) => {
+                    return (
+                      <DropdownMenuCheckboxItem
+                        key={column.id}
+                        className="capitalize"
+                        checked={column.getIsVisible()}
+                        onCheckedChange={(value) =>
+                          column.toggleVisibility(!!value)
+                        }
+                      >
+                        {column.id}
+                      </DropdownMenuCheckboxItem>
+                    );
+                  })}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
           <Table>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
@@ -272,74 +285,32 @@ export default function TableUsers<TData, TValue>({
               )}
             </TableBody>
           </Table>
-        </div>
-        <div className="flex justify-end items-center py-4 space-x-2">
-          <div className="flex-1 text-sm text-muted-foreground">
-            {table.getFilteredSelectedRowModel().rows.length} of{" "}
-            {table.getFilteredRowModel().rows.length} row(s) selected.
-          </div>
-          <div className="space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              Previous
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              Next
-            </Button>
-          </div>
-        </div>
-      </div>
-      {/* <Table>
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
-                );
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && "selected"}
+          <div className="flex justify-end items-center py-4 space-x-2">
+            <div className="flex-1 text-sm text-muted-foreground">
+              {table.getFilteredSelectedRowModel().rows.length} of{" "}
+              {table.getFilteredRowModel().rows.length} row(s) selected.
+            </div>
+            <div className="space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
               >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table> */}
+                Previous
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+              >
+                Next
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </>
   );
 }
