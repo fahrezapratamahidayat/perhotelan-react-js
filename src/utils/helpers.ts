@@ -2,14 +2,30 @@ import { format, parseISO } from "date-fns";
 import { id } from "date-fns/locale";
 export function formatCurrency(value: number): string {
     if (value >= 1000000) {
-        return ` ${value} JT`;
+        return new Intl.NumberFormat('id-ID', {
+            style: 'decimal',
+            maximumFractionDigits: 5
+        }).format(value / 1000000) + ' JT';
     } else if (value >= 100000) {
-        return `${(value / 1000).toFixed(0)} K`;
+        return new Intl.NumberFormat('id-ID', {
+            style: 'decimal',
+            maximumFractionDigits: 5
+        }).format(value / 1000) + ' K';
+    } else if (value >= 10000) {
+        return new Intl.NumberFormat('id-ID', {
+            style: 'decimal',
+            maximumFractionDigits: 5
+        }).format(value / 1000) + ' K';
+    } else if (value >= 1000) {
+        return new Intl.NumberFormat('id-ID', {
+            style: 'decimal',
+            maximumFractionDigits: 5
+        }).format(value / 1000) + ' K';
     } else {
-        return value.toLocaleString("id-ID", {
-            style: "currency",
-            currency: "IDR",
-        });
+        return new Intl.NumberFormat('id-ID', {
+            style: 'decimal',
+            maximumFractionDigits: 5
+        }).format(value) + ' K';
     }
 }
 
