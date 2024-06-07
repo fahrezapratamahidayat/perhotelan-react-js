@@ -98,7 +98,7 @@ export interface reservasiTypes {
     tanggalCheckIn: any;
     tanggalCheckOut: any;
     durasiMenginap: number;
-    statusReservasi: "Diterima" | "Dibatalkan" | "Dibayar" | "Dipesan" | "Dibatalkan";
+    statusReservasi: "Diterima" | "Dibatalkan" | "Dibayar" | "Dipesan";
     jenisReservasi: "Pemesanan" | "Reservasi" | "Booking";
     jumlahTamu: number;
     permintaanTamu: string;
@@ -155,6 +155,12 @@ export type analytics = {
     totalPengguna: number;
     totalReservasi: number
     totalKamar: number
+}
+
+
+export type analyticsmonthly = {
+    name: string;
+    total: number;
 }
 
 
