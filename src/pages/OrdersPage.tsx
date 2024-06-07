@@ -1,47 +1,19 @@
-import {
-  File,
-  Home,
-  LineChart,
-  ListFilter,
-  Menu,
-  Package,
-  Package2,
-  Search,
-  ShoppingCart,
-  Users2,
-} from "lucide-react";
+import { Home, LineChart, Menu, Package, Package2, Search, ShoppingCart, Users2 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
 import NavbarAdmin from "@/components/navigation/navbarAdmin";
 import { AvatarDropDown } from "@/components/dropdown/avatar-dropdown";
-import TableCustomer from "@/components/table/table-customer";
+import TableCustomer, { columns } from "@/components/table/table-customer";
 import useSWR, { useSWRConfig } from "swr";
 import axios from "axios";
-import { Resevasi, reservasiTypes } from "@/types";
+import { reservasiTypes } from "@/types";
 import { useEffect, useState } from "react";
 import CardOrder from "@/components/card/card-order";
 import * as XLSX from "xlsx";
-import { id } from "date-fns/locale";
 
 export function OrdersPage() {
   const { mutate } = useSWRConfig();
@@ -52,15 +24,15 @@ export function OrdersPage() {
 
   const fetcher = async () => {
     const res = await axios.get("http://localhost:3000/api/reservation");
-    return res.data;
+    return res.data.datas;
   };
 
-  const { data, error, isLoading } = useSWR<Resevasi>("/reservation", fetcher);
+  const { data, error, isLoading } = useSWR<reservasiTypes[]>("/reservation", fetcher);
 
   useEffect(() => {
-    if (data && data.datas && data.datas.length > 0) {
-      setSelectedReservation(data.datas[0]);
-      setSelectedReservationId(data.datas[0].idReservasi);
+    if (data && data.length > 0) {
+      setSelectedReservation(data[0]);
+      setSelectedReservationId(data[0].idReservasi);
     }
   }, [data]);
 
@@ -90,7 +62,7 @@ export function OrdersPage() {
       }));
   };
   const exportToExcel = () => {
-    const cleanedData = cleanDataForExport(data?.datas || []);
+    const cleanedData = cleanDataForExport(data || []);
     const ws = XLSX.utils.json_to_sheet(cleanedData);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Data Reservasi");
@@ -178,68 +150,11 @@ export function OrdersPage() {
         </header>
         <main className="grid flex-1 gap-4 items-start p-4 mt-5 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
           <div className="grid auto-rows-max gap-4 items-start md:gap-8 lg:col-span-2">
-            <Tabs defaultValue="week">
-              <div className="flex items-center">
-                <TabsList>
-                  <TabsTrigger value="week">Week</TabsTrigger>
-                  <TabsTrigger value="month">Month</TabsTrigger>
-                  <TabsTrigger value="year">Year</TabsTrigger>
-                </TabsList>
-                <div className="flex gap-2 items-center ml-auto">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="gap-1 h-7 text-sm"
-                      >
-                        <ListFilter className="h-3.5 w-3.5" />
-                        <span className="sr-only sm:not-sr-only">Filter</span>
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuLabel>Filter by</DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuCheckboxItem checked>
-                        Fulfilled
-                      </DropdownMenuCheckboxItem>
-                      <DropdownMenuCheckboxItem>
-                        Declined
-                      </DropdownMenuCheckboxItem>
-                      <DropdownMenuCheckboxItem>
-                        Refunded
-                      </DropdownMenuCheckboxItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="gap-1 h-7 text-sm"
-                    onClick={exportToExcel}
-                  >
-                    <File className="h-3.5 w-3.5" />
-                    <span className="sr-only sm:not-sr-only">Export</span>
-                  </Button>
-                </div>
-              </div>
-              <TabsContent value="week">
-                <Card x-chunk="dashboard-05-chunk-3">
-                  <CardHeader className="px-7">
-                    <CardTitle>Reservasi Hotel</CardTitle>
-                    <CardDescription>
-                      Reservasi terbaru dari hotel Anda.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <TableCustomer
-                      data={data}
-                      selectedReservation={handleSelectReservation}
-                      selectedReservationId={selectedReservationId}
-                    />
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </Tabs>
+              <TableCustomer
+                data={data as reservasiTypes[]}
+                selectedReservation={handleSelectReservation}
+                columns={columns}
+              />
           </div>
           <div>
             {selectedReservation.idReservasi && (
