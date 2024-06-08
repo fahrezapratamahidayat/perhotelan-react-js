@@ -14,7 +14,7 @@ import { Link, useLocation } from "react-router-dom";
 export default function NavbarAdmin() {
   const pathname = useLocation().pathname;
   return (
-    <div className="hidden border-r bg-muted/40 md:block">
+    <div className="hidden border-r md:block">
       <div className="flex flex-col gap-2 h-full max-h-screen">
         <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
           <Link to="/" className="flex gap-2 items-center font-semibold">
@@ -27,7 +27,7 @@ export default function NavbarAdmin() {
           </Button>
         </div>
         <div className="flex-1">
-          <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
+          <nav className="grid items-start px-2 text-sm font-medium lg:px-4 gap-y-2">
             <Link
               to="/admin/dashboard"
               className={`flex items-center gap-3 px-3 py-2 transition-all rounded-lg ${
@@ -66,15 +66,6 @@ export default function NavbarAdmin() {
             >
               <Users className="w-4 h-4" />
               Customers
-            </Link>
-            <Link
-              to="/admin/analytics"
-              className={`flex items-center gap-3 px-3 py-2 transition-all rounded-lg ${
-                pathname.includes("/analytics") ? "bg-muted" : "hover:bg-muted"
-              } text-primary hover:text-primary`}
-            >
-              <LineChart className="w-4 h-4" />
-              Analytics
             </Link>
           </nav>
         </div>

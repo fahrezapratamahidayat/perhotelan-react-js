@@ -32,10 +32,11 @@ import axios from "axios";
 import TableRooms from "@/components/(admin)/table-data/table-rooms";
 import { AvatarDropDown } from "@/components/dropdown/avatar-dropdown";
 import NavbarAdmin from "@/components/navigation/navbarAdmin";
+import { ModeToggle } from "../dark-mode-toggel";
 
 export function NavbarMobile() {
   return (
-        <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
+        <header className="flex h-14 items-center gap-4 border-b px-4 lg:h-[60px] lg:px-6">
           <Sheet>
             <SheetTrigger asChild>
               <Button
@@ -97,19 +98,10 @@ export function NavbarMobile() {
               </nav>
             </SheetContent>
           </Sheet>
-          <div className="flex-1 w-full">
-            <form>
-              <div className="relative">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="search"
-                  placeholder="Search Rooms..."
-                  className="pl-8 w-full shadow-none appearance-none bg-background md:w-2/3 lg:w-1/3"
-                />
-              </div>
-            </form>
-          </div>
+          <div className="flex items-center justify-end w-full gap-x-3">
+          <ModeToggle />
           <AvatarDropDown />
+          </div>
         </header>
   );
 }

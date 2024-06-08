@@ -10,7 +10,7 @@ import useCheckSession from "@/hooks/session-provider";
 export default function HomePage() {
  useCheckSession();
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen">
       <Navbar />
       <div className="relative w-full h-[80vh] flex items-center justify-center bg-[url('/hotel-exterior.jpg')] bg-cover bg-center  flex-col overflow-hidden rounded-md">
         <h1 className="relative z-20 text-3xl font-bold text-center text-white md:text-7xl lg:text-3xl">
@@ -19,9 +19,9 @@ export default function HomePage() {
         <div className="w-[40rem] h-40 relative">
           {/* Gradients */}
           <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-[2px] w-3/4 blur-sm" />
-          <div className="absolute top-0 w-3/4 h-px inset-x-20 bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
+          <div className="absolute top-0 inset-x-20 w-3/4 h-px bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
           <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-[5px] w-1/4 blur-sm" />
-          <div className="absolute top-0 w-1/4 h-px inset-x-60 bg-gradient-to-r from-transparent via-sky-500 to-transparent" />
+          <div className="absolute top-0 inset-x-60 w-1/4 h-px bg-gradient-to-r from-transparent via-sky-500 to-transparent" />
 
           {/* Core component */}
           <SparklesCore
@@ -34,11 +34,11 @@ export default function HomePage() {
           />
 
           {/* Radial Gradient to prevent sharp edges */}
-          <div className="absolute inset-0 w-full h-full bg-black [mask-image:radial-gradient(350px_200px_at_top,transparent_20%,white)]"></div>
+          <div className="absolute inset-0 w-full h-full [mask-image:radial-gradient(350px_200px_at_top,transparent_20%,white)]"></div>
         </div>
       </div>
-      {/* <main className="flex-1 ">
-        <section className="w-full pt-12 md:pt-24 lg:pt-32 border-y">
+      {/* <main className="flex-1">
+        <section className="pt-12 w-full md:pt-24 lg:pt-32 border-y">
           <div className="px-4 space-y-10 md:px-6 xl:space-y-16">
             <img
               alt="Hero"
@@ -49,9 +49,9 @@ export default function HomePage() {
             />
           </div>
         </section>
-        <section className="w-full py-12 md:py-24 lg:py-32">
+        <section className="py-12 w-full md:py-24 lg:py-32">
           <div className="container px-4 space-y-12 md:px-6">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+            <div className="flex flex-col justify-center items-center space-y-4 text-center">
               <div className="space-y-2">
                 <div className="inline-block px-3 py-1 text-sm bg-gray-100 rounded-lg dark:bg-gray-800">
                   Amenities
@@ -65,7 +65,7 @@ export default function HomePage() {
                 </p>
               </div>
             </div>
-            <div className="grid items-start gap-8 mx-auto sm:max-w-4xl sm:grid-cols-2 md:gap-12 lg:max-w-5xl lg:grid-cols-3">
+            <div className="grid gap-8 items-start mx-auto sm:max-w-4xl sm:grid-cols-2 md:gap-12 lg:max-w-5xl lg:grid-cols-3">
               <div className="grid gap-1">
                 <h3 className="text-lg font-bold">Luxury Spa</h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -111,8 +111,8 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-        <section className="w-full py-12 md:py-24 lg:py-32 ">
-          <div className="container grid items-center justify-center gap-4 px-4 md:px-6">
+        <section className="py-12 w-full md:py-24 lg:py-32">
+          <div className="container grid gap-4 justify-center items-center px-4 md:px-6">
             <div className="space-y-3">
               <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight">
                 Rooms Designed for Relaxation
@@ -122,10 +122,10 @@ export default function HomePage() {
                 carefully curated for your comfort and enjoyment.
               </p>
             </div>
-            <div className="grid items-center max-w-5xl gap-6 py-12 mx-auto lg:grid-cols-2 lg:gap-12">
+            <div className="grid gap-6 items-center py-12 mx-auto max-w-5xl lg:grid-cols-2 lg:gap-12">
               <img
                 alt="Room"
-                className="object-cover object-center mx-auto overflow-hidden aspect-video rounded-xl sm:w-full lg:order-last"
+                className="object-cover object-center overflow-hidden mx-auto rounded-xl aspect-video sm:w-full lg:order-last"
                 height={310}
                 src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
                 width={550}
@@ -163,8 +163,8 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-        <section className="w-full py-12 md:py-24 lg:py-32">
-          <div className="container grid items-center justify-center gap-4 px-4 md:px-6 lg:gap-10">
+        <section className="py-12 w-full md:py-24 lg:py-32">
+          <div className="container grid gap-4 justify-center items-center px-4 md:px-6 lg:gap-10">
             <div className="space-y-3">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
                 What Our Guests Say
@@ -174,10 +174,10 @@ export default function HomePage() {
                 the premier choice for your next stay.
               </p>
             </div>
-            <div className="grid lg:grid-cols-2 gap-x-32 gap-y-12">
+            <div className="grid gap-y-12 gap-x-32 lg:grid-cols-2">
               <article className="grid gap-3">
-                <div className="flex items-center gap-4">
-                  <Avatar className="border w-11 h-11">
+                <div className="flex gap-4 items-center">
+                  <Avatar className="w-11 h-11 border">
                     <AvatarImage alt="@username" src="/placeholder-user.jpg" />
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
@@ -188,8 +188,8 @@ export default function HomePage() {
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-2 text-xs font-semibold">
-                  <div className="flex items-center gap-px">
+                <div className="flex gap-2 items-center text-xs font-semibold">
+                  <div className="flex gap-px items-center">
                     <StarIcon className="w-2.5 h-2.5 fill-primary" />
                     <StarIcon className="w-2.5 h-2.5 fill-primary" />
                     <StarIcon className="w-2.5 h-2.5 fill-primary" />
@@ -204,8 +204,8 @@ export default function HomePage() {
                 </div>
               </article>
               <article className="grid gap-3">
-                <div className="flex items-center gap-4">
-                  <Avatar className="border w-11 h-11">
+                <div className="flex gap-4 items-center">
+                  <Avatar className="w-11 h-11 border">
                     <AvatarImage alt="@username" src="/placeholder-user.jpg" />
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
@@ -216,8 +216,8 @@ export default function HomePage() {
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-2 text-xs font-semibold">
-                  <div className="flex items-center gap-px">
+                <div className="flex gap-2 items-center text-xs font-semibold">
+                  <div className="flex gap-px items-center">
                     <StarIcon className="w-2.5 h-2.5 fill-primary" />
                     <StarIcon className="w-2.5 h-2.5 fill-primary" />
                     <StarIcon className="w-2.5 h-2.5 fill-primary" />
@@ -232,8 +232,8 @@ export default function HomePage() {
                 </div>
               </article>
               <article className="grid gap-3">
-                <div className="flex items-center gap-4">
-                  <Avatar className="border w-11 h-11">
+                <div className="flex gap-4 items-center">
+                  <Avatar className="w-11 h-11 border">
                     <AvatarImage alt="@username" src="/placeholder-user.jpg" />
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
@@ -244,8 +244,8 @@ export default function HomePage() {
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-2 text-xs font-semibold">
-                  <div className="flex items-center gap-px">
+                <div className="flex gap-2 items-center text-xs font-semibold">
+                  <div className="flex gap-px items-center">
                     <StarIcon className="w-2.5 h-2.5 fill-primary" />
                     <StarIcon className="w-2.5 h-2.5 fill-primary" />
                     <StarIcon className="w-2.5 h-2.5 fill-primary" />
@@ -260,8 +260,8 @@ export default function HomePage() {
                 </div>
               </article>
               <article className="grid gap-3">
-                <div className="flex items-center gap-4">
-                  <Avatar className="border w-11 h-11">
+                <div className="flex gap-4 items-center">
+                  <Avatar className="w-11 h-11 border">
                     <AvatarImage alt="@username" src="/placeholder-user.jpg" />
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
@@ -272,8 +272,8 @@ export default function HomePage() {
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-2 text-xs font-semibold">
-                  <div className="flex items-center gap-px">
+                <div className="flex gap-2 items-center text-xs font-semibold">
+                  <div className="flex gap-px items-center">
                     <StarIcon className="w-2.5 h-2.5 fill-primary" />
                     <StarIcon className="w-2.5 h-2.5 fill-primary" />
                     <StarIcon className="w-2.5 h-2.5 fill-primary" />

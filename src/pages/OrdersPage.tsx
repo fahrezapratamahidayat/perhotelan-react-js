@@ -14,6 +14,7 @@ import { reservasiTypes } from "@/types";
 import { useEffect, useState } from "react";
 import CardOrder from "@/components/card/card-order";
 import * as XLSX from "xlsx";
+import { NavbarMobile } from "@/components/navigation/nvabar-mobile";
 
 export function OrdersPage() {
   const { mutate } = useSWRConfig();
@@ -72,82 +73,7 @@ export function OrdersPage() {
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <NavbarAdmin />
       <div className="flex flex-col">
-        <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                className="shrink-0 md:hidden"
-              >
-                <Menu className="w-5 h-5" />
-                <span className="sr-only">Toggle navigation menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="flex flex-col">
-              <nav className="grid gap-2 text-lg font-medium">
-                <Link
-                  to="#"
-                  className="flex gap-2 items-center text-lg font-semibold"
-                >
-                  <Package2 className="w-6 h-6" />
-                  <span className="sr-only">Acme Inc</span>
-                </Link>
-                <Link
-                  to="#"
-                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                >
-                  <Home className="w-5 h-5" />
-                  Dashboard
-                </Link>
-                <Link
-                  to="#"
-                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground"
-                >
-                  <ShoppingCart className="w-5 h-5" />
-                  Orders
-                  <Badge className="flex justify-center items-center ml-auto w-6 h-6 rounded-full shrink-0">
-                    6
-                  </Badge>
-                </Link>
-                <Link
-                  to="#"
-                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                >
-                  <Package className="w-5 h-5" />
-                  Rooms
-                </Link>
-                <Link
-                  to="#"
-                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                >
-                  <Users2 className="w-5 h-5" />
-                  Customers
-                </Link>
-                <Link
-                  to="#"
-                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                >
-                  <LineChart className="w-5 h-5" />
-                  Analytics
-                </Link>
-              </nav>
-            </SheetContent>
-          </Sheet>
-          <div className="flex-1 w-full">
-            <form>
-              <div className="relative">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="search"
-                  placeholder="Search Rooms..."
-                  className="pl-8 w-full shadow-none appearance-none bg-background md:w-2/3 lg:w-1/3"
-                />
-              </div>
-            </form>
-          </div>
-          <AvatarDropDown />
-        </header>
+        <NavbarMobile />  
         <main className="grid flex-1 gap-4 items-start p-4 mt-5 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
           <div className="grid auto-rows-max gap-4 items-start md:gap-8 lg:col-span-2">
               <TableCustomer

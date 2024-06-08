@@ -140,9 +140,9 @@ export default function ReservationForm({ id, data }: formProps) {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col items-center justify-around gap-5 lg:mx-32 lg:flex-row md:py-24 lg:py-4 lg:p-4"
+          className="flex flex-col gap-5 justify-around items-center lg:mx-32 lg:flex-row md:py-24 lg:py-4 lg:p-4"
         >
-          <div className="w-full max-w-lg px-5 py-4 rounded-lg bg-muted/40 ">
+          <div className="px-5 py-4 w-full max-w-lg rounded-lg bg-muted/40">
             <div className="">
               <h2 className="text-2xl font-bold tracking-tighter">
                 Informasi Anda
@@ -151,7 +151,7 @@ export default function ReservationForm({ id, data }: formProps) {
                 Silahkan isi data diri anda
               </p>
             </div>
-            <div className="w-full mt-3 space-y-4 ">
+            <div className="mt-3 space-y-4 w-full">
               <div className="flex flex-col gap-3">
                 <FormField
                   control={form.control}
@@ -253,7 +253,7 @@ export default function ReservationForm({ id, data }: formProps) {
               </div>
             </div>
           </div>
-          <div className="w-full max-w-lg px-5 py-4 rounded-lg bg-muted/40">
+          <div className="px-5 py-4 w-full max-w-lg rounded-lg bg-muted/40">
             <div className="">
               <h2 className="text-2xl font-bold tracking-tighter">
                 Detail Reservasi Kamar
@@ -262,7 +262,7 @@ export default function ReservationForm({ id, data }: formProps) {
                 Silahkan isi detail reservasi kamar anda
               </p>
               <div className="flex flex-col mt-3">
-                <div className="flex items-center gap-2">
+                <div className="flex gap-2 items-center">
                   <h2 className="text-xl font-medium tracking-tighter">
                     Staycation Rooms
                   </h2>
@@ -296,7 +296,7 @@ export default function ReservationForm({ id, data }: formProps) {
                                 !checkInDate && "text-muted-foreground"
                               )}
                             >
-                              <CalendarIcon className="w-4 h-4 mr-2" />
+                              <CalendarIcon className="mr-2 w-4 h-4" />
                               {checkInDate ? (
                                 format(checkInDate, "LLL dd, y")
                               ) : (
@@ -363,7 +363,7 @@ export default function ReservationForm({ id, data }: formProps) {
                           !checkOutDate && "text-muted-foreground"
                         )}
                       >
-                        <CalendarIcon className="w-4 h-4 mr-2" />
+                        <CalendarIcon className="mr-2 w-4 h-4" />
                         {checkOutDate ? (
                           format(checkOutDate, "LLL dd, y")
                         ) : (
@@ -410,7 +410,7 @@ export default function ReservationForm({ id, data }: formProps) {
                   )}
                 />
                 <Separator />
-                <div className="w-full max-w-md px-5 py-4 mt-5 rounded-lg bg-muted/40">
+                <div className="px-5 py-4 mt-5 w-full max-w-md rounded-lg bg-muted/40">
                   <div className="">
                     <h2 className="text-2xl font-bold tracking-tighter">
                       Total Pembayaran
@@ -440,7 +440,7 @@ export default function ReservationForm({ id, data }: formProps) {
                     </div>
                   </div>
                 </div>
-                <Button className="w-full mt-5" type="submit">
+                <Button className="mt-5 w-full" type="submit">
                   Pesan Kamar
                 </Button>
               </div>
