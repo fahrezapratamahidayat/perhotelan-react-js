@@ -1,4 +1,13 @@
-import { Database, History, LifeBuoy, Link2, ListOrderedIcon, LogOut, Settings, User } from "lucide-react";
+import {
+  Database,
+  History,
+  LifeBuoy,
+  Link2,
+  ListOrderedIcon,
+  LogOut,
+  Settings,
+  User,
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,7 +27,6 @@ export function AvatarDropDown() {
   const { checkUserToken, signOut, userData } = useUserStore();
   const { login } = checkUserToken();
   const location = useLocation();
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -27,22 +35,26 @@ export function AvatarDropDown() {
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      {userData && userData.peranTamu === "Admin" ? (
+      {(userData && userData.peran === "Pegawai") ||
+      userData?.peran === "Admin" ? (
         <DropdownMenuContent className="w-56 mt-2 mr-4">
           <DropdownMenuLabel
             className={`flex flex-col ${login ? "" : "hidden"}`}
           >
             <Suspense fallback={<div>Loading...</div>}>
-              <h3 className="text-sm font-medium">{userData?.namaTamu} (Admin)</h3>
+              <h3 className="text-sm font-medium">
+                {userData?.namaTamu || userData?.namaPegawai} ({userData?.peran}
+                )
+              </h3>
               <p className="text-sm text-muted-foreground">
-                {userData?.emailTamu}
+                {userData?.emailTamu || userData?.emailPegawai}
               </p>
             </Suspense>
           </DropdownMenuLabel>
           <DropdownMenuSeparator className={` ${login ? "" : "hidden"}`} />
           <DropdownMenuGroup>
             <DropdownMenuItem>
-              <DashboardIcon className="w-4 h-4 mr-2"/>
+              <DashboardIcon className="w-4 h-4 mr-2" />
               <Link to={"/admin/dashboard"}>Dashboard</Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
@@ -79,50 +91,56 @@ export function AvatarDropDown() {
           </DropdownMenuItem>
         </DropdownMenuContent>
       ) : (
-              <DropdownMenuContent className="w-56 mt-2 mr-4">
-        <DropdownMenuLabel className={`flex flex-col ${login ? "" : "hidden"}`}>
-          <Suspense fallback={<div>Loading...</div>}>
-            <h3 className="text-sm font-medium">{userData?.namaTamu}</h3>
-            <p className="text-sm text-muted-foreground">{userData?.emailTamu}</p>
-          </Suspense>
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator className={` ${login ? "" : "hidden"}`} />
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <User className="w-4 h-4 mr-2" />
-            <Link to={"/profile"}>Profile</Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Settings className="w-4 h-4 mr-2" />
-            <Link to={"/settings"}>Settings</Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <History className="w-4 h-4 mr-2" />
-            <Link to={"/reservations"}>Reservations</Link>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <LifeBuoy className="w-4 h-4 mr-2" />
-          <span>Support</span>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem className={` ${login ? "" : "hidden"}`}>
-          <LogOut className="w-4 h-4 mr-2" />
-          <Button
-            className="h-0 px-0 py-0"
-            variant={"ghost"}
-            onClick={() => signOut()}
+        <DropdownMenuContent className="w-56 mt-2 mr-4">
+          <DropdownMenuLabel
+            className={`flex flex-col ${login ? "" : "hidden"}`}
           >
-            {" "}
-            Log out
-          </Button>
-        </DropdownMenuItem>
-        <DropdownMenuItem className={` ${login ? "hidden" : ""}`}>
-          <Link2 className="w-4 h-4 mr-2" />
-          <Link to={`/auth/login?callbackUrl=${location.pathname}`}>Login</Link>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
+            <Suspense fallback={<div>Loading...</div>}>
+              <h3 className="text-sm font-medium">{userData?.namaTamu}</h3>
+              <p className="text-sm text-muted-foreground">
+                {userData?.emailTamu}
+              </p>
+            </Suspense>
+          </DropdownMenuLabel>
+          <DropdownMenuSeparator className={` ${login ? "" : "hidden"}`} />
+          <DropdownMenuGroup>
+            <DropdownMenuItem>
+              <User className="w-4 h-4 mr-2" />
+              <Link to={"/profile"}>Profile</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Settings className="w-4 h-4 mr-2" />
+              <Link to={"/settings"}>Settings</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <History className="w-4 h-4 mr-2" />
+              <Link to={"/reservations"}>Reservations</Link>
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>
+            <LifeBuoy className="w-4 h-4 mr-2" />
+            <span>Support</span>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem className={` ${login ? "" : "hidden"}`}>
+            <LogOut className="w-4 h-4 mr-2" />
+            <Button
+              className="h-0 px-0 py-0"
+              variant={"ghost"}
+              onClick={() => signOut()}
+            >
+              {" "}
+              Log out
+            </Button>
+          </DropdownMenuItem>
+          <DropdownMenuItem className={` ${login ? "hidden" : ""}`}>
+            <Link2 className="w-4 h-4 mr-2" />
+            <Link to={`/auth/login?callbackUrl=${location.pathname}`}>
+              Login
+            </Link>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
       )}
     </DropdownMenu>
   );
