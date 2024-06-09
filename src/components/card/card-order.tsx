@@ -35,12 +35,14 @@ import ExportPDF from "../pdf/reservasion";
 import axios from "axios";
 import { useToast } from "../ui/use-toast";
 import { useSWRConfig } from "swr";
+import useUserStore from "@/hooks/use-session";
 
 export default function CardOrder({ data }: { data: reservasiTypes }) {
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsloading] = useState(false);
   const { toast } = useToast();
   const { mutate } = useSWRConfig();
+  const {userData} = useUserStore();
 
   const handleExportToPDF = () => {
     console.log("Memulai proses ekspor...");
@@ -53,6 +55,7 @@ export default function CardOrder({ data }: { data: reservasiTypes }) {
       const respone = await axios.put(`http://localhost:3000/api/reservation`, {
         reservationId: data.idReservasi,
         statusReservasi: "Diterima",
+        noPegawai: userData?.idPegawai
       });
       if (respone.data.status === 200) {
         toast({
