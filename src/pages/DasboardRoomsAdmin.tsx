@@ -55,7 +55,7 @@ export function DashBoardRoomsPage() {
       <div className="flex flex-col">
         <NavbarMobile />
         <main className="grid flex-1 gap-4 items-start p-4 mt-5 sm:px-6 sm:py-0 md:gap-8">
-          {data.data && data.data.length > 0 ? (
+          {data.data && data.data.length ? (
             <div defaultValue="flex">
               {/* <div className="flex items-center">
                 <div className="flex gap-2 items-center mb-3 ml-auto">
