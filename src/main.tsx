@@ -22,6 +22,7 @@ import EditRoomPage from "./pages/EditRoomPage.tsx";
 import { OrdersPage } from "./pages/OrdersPage.tsx";
 import { Dashboard } from "./pages/Dashboard.tsx";
 import { CustumersPage } from "./pages/CustumersPage.tsx";
+import { LoginAdminPage } from "./pages/LoginAdminPage.tsx";
 
 axios.defaults.withCredentials = true;
 
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
   {
     path: "auth/login",
     element: <LoginPage />,
+  },
+  {
+    path: "auth/login/pegawai",
+    element: <LoginAdminPage />,
   },
   {
     path: "auth/register",
