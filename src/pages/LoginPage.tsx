@@ -1,5 +1,5 @@
 import LoginForm from "@/components/form/login-form";
-import AuthLayout from "@/components/layouts/auth-layouts";
+import { AuthLayout } from "@/components/layouts/auth-layouts";
 
 export function LoginPage() {
   return (
