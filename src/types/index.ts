@@ -66,9 +66,12 @@ export interface detailRoom {
 
 export interface userData {
     idTamu: number;
+    idPegawai: number;
     namaTamu: string;
     emailTamu: string;
-    peranTamu: string;
+    namaPegawai: string;
+    emailPegawai: string
+    peran: string;
     statusTamu: string;
     pekerjaan: string;
     tanggalDibuat: string;
