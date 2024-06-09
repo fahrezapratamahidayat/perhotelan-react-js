@@ -17,7 +17,6 @@ export default function AuthRoute({ children, adminOnly }: AuthRouteProps) {
 
   useEffect(() => {
     if (!login) {
-      // Jika tidak login, arahkan kembali ke halaman login dengan state dari halaman sebelumnya
       navigate("/auth/login", {
         state: { from: location.pathname },
         replace: true,
@@ -25,13 +24,16 @@ export default function AuthRoute({ children, adminOnly }: AuthRouteProps) {
       return;
     }
 
-    if (adminOnly && userData?.peranTamu !== "Admin") {
+    if (
+      adminOnly &&
+      userData?.peran !== "Admin" &&
+      userData?.peran !== "Pegawai"
+    ) {
       toast({
         title: "Unauthorized",
         description: "You are not authorized to access this page",
         variant: "destructive",
       });
-      // Jika tidak memiliki peran admin, arahkan kembali ke halaman login dengan state dari halaman sebelumnya
       navigate("/auth/login", {
         state: { from: location.pathname },
         replace: true,
@@ -39,12 +41,14 @@ export default function AuthRoute({ children, adminOnly }: AuthRouteProps) {
     }
   }, [login, adminOnly, userData, toast, navigate, location]);
 
-  // Jika login dan userData valid, atau kondisi admin tidak diperlukan, tampilkan children
-  if (login && (!adminOnly || (adminOnly && userData?.peranTamu === "Admin"))) {
+  if (
+    login &&
+    (!adminOnly ||
+      (adminOnly && userData?.peran === "Admin") ||
+      userData?.peran === "Pegawai")
+  ) {
     return children;
   }
 
-  // Jika belum login atau sedang menunggu data, tampilkan null
-  // Pengguna tidak akan melihat apa-apa selama kondisi ini
   return null;
 }
