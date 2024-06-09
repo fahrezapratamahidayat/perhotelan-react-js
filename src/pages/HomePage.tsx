@@ -1,14 +1,7 @@
-import { useState } from "react";
 import Navbar from "../components/navigation/navbar";
-import { Button } from "../components/ui/button";
-import useUserStore from "../hooks/use-session";
-import { Link, redirect, useNavigate } from "react-router-dom";
 import { SparklesCore } from "../components/ui/sparkles";
-import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
-import useCheckSession from "@/hooks/session-provider";
 
 export default function HomePage() {
- useCheckSession();
   return (
     <div className="min-h-screen">
       <Navbar />
