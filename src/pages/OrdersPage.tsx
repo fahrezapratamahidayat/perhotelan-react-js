@@ -1,4 +1,13 @@
-import { Home, LineChart, Menu, Package, Package2, Search, ShoppingCart, Users2 } from "lucide-react";
+import {
+  Home,
+  LineChart,
+  Menu,
+  Package,
+  Package2,
+  Search,
+  ShoppingCart,
+  Users2,
+} from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -28,7 +37,10 @@ export function OrdersPage() {
     return res.data.datas;
   };
 
-  const { data, error, isLoading } = useSWR<reservasiTypes[]>("/reservation", fetcher);
+  const { data, error, isLoading } = useSWR<reservasiTypes[]>(
+    "/reservation",
+    fetcher
+  );
 
   useEffect(() => {
     if (data && data.length > 0) {
@@ -62,8 +74,8 @@ export function OrdersPage() {
         statusPembayaran: item.Pembayaran.statusPembayaran || "N/A",
       }));
   };
-  const exportToExcel = () => {
-    const cleanedData = cleanDataForExport(data || []);
+  const exportToExcel = (exportData: reservasiTypes[]) => {
+    const cleanedData = cleanDataForExport(exportData);
     const ws = XLSX.utils.json_to_sheet(cleanedData);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Data Reservasi");
@@ -73,14 +85,15 @@ export function OrdersPage() {
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <NavbarAdmin />
       <div className="flex flex-col">
-        <NavbarMobile />  
+        <NavbarMobile />
         <main className="grid flex-1 gap-4 items-start p-4 mt-5 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
           <div className="grid auto-rows-max gap-4 items-start md:gap-8 lg:col-span-2">
-              <TableCustomer
-                data={data as reservasiTypes[]}
-                selectedReservation={handleSelectReservation}
-                columns={columns}
-              />
+            <TableCustomer
+              data={data as reservasiTypes[]}
+              selectedReservation={handleSelectReservation}
+              columns={columns}
+              exportToExcel={exportToExcel}
+            />
           </div>
           <div>
             {selectedReservation.idReservasi && (

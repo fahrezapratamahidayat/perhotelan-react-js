@@ -23,6 +23,7 @@ import { OrdersPage } from "./pages/OrdersPage.tsx";
 import { Dashboard } from "./pages/Dashboard.tsx";
 import { CustumersPage } from "./pages/CustumersPage.tsx";
 import { LoginAdminPage } from "./pages/LoginAdminPage.tsx";
+import CreateOrdersPage from "./pages/createOrdersPage.tsx";
 
 axios.defaults.withCredentials = true;
 
@@ -84,6 +85,14 @@ const router = createBrowserRouter([
     element: (
       <AuthRoute adminOnly={true}>
         <OrdersPage />
+      </AuthRoute>
+    ),
+  },
+  {
+    path: "admin/orders/create",
+    element: (
+      <AuthRoute adminOnly={true}>
+        <CreateOrdersPage />
       </AuthRoute>
     ),
   },

@@ -32,16 +32,41 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
-import { ChevronDown, Filter, PlusCircle } from "lucide-react";
+import { ChevronDown, File, Filter, PlusCircle } from "lucide-react";
 import { cn } from "@/utils/cn";
+import { Checkbox } from "../ui/checkbox";
+import { Link, useNavigate } from "react-router-dom";
 
 interface Props {
   data: Resevasi | undefined;
   selectedReservation: (item: reservasiTypes) => void;
   selectedReservationId: number | null;
+  exportToExcel: (data: reservasiTypes[]) => void;
 }
 
 export const columns: ColumnDef<reservasiTypes>[] = [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
   {
     accessorKey: "infoTamu",
     header: ({ column }) => <div className="text-left">Informasi Tamu</div>,
@@ -102,11 +127,13 @@ export const columns: ColumnDef<reservasiTypes>[] = [
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  exportToExcel: (data: reservasiTypes[]) => void;
   selectedReservation: (item: reservasiTypes) => void;
 }
 export default function TableCustomer<TData extends reservasiTypes, TValue>({
   data,
   selectedReservation,
+  exportToExcel,
 }: DataTableProps<TData, TValue>) {
   const { mutate } = useSWRConfig();
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -116,7 +143,9 @@ export default function TableCustomer<TData extends reservasiTypes, TValue>({
   const [statusFilter, setStatusFilter] = React.useState("Menunggu");
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
+  const [rowSelection, setRowSelection] = React.useState<any>({});
+
+  const router = useNavigate();
 
   const filteredData = useMemo(() => {
     return data.filter((room) => {
@@ -142,6 +171,10 @@ export default function TableCustomer<TData extends reservasiTypes, TValue>({
       rowSelection,
     },
   });
+  const handleExport = () => {
+    const selectedData = data.filter((item, index) => rowSelection[index]);
+    exportToExcel(selectedData.length > 0 ? selectedData : data);
+  };
   return (
     <>
       <Card x-chunk="dashboard-05-chunk-3">
@@ -189,7 +222,7 @@ export default function TableCustomer<TData extends reservasiTypes, TValue>({
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="">
-                  <Filter className="w-4 h-4 mr-2" />
+                  <Filter className="mr-2 w-4 h-4" />
                   Filter Status
                 </Button>
               </DropdownMenuTrigger>
@@ -230,13 +263,23 @@ export default function TableCustomer<TData extends reservasiTypes, TValue>({
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            <div className="flex items-center">
-              <Button className="ml-auto">
+            <div className="flex items-center rounded-sm px-2 py-1.5">
+              <Button variant="outline" className="" onClick={handleExport}>
+                <File className="mr-2 w-4 h-4" />
                 <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                  Buat Reservasi
+                  Export
                 </span>{" "}
-                <PlusCircle className="ml-2 w-4 h-4" />
               </Button>
+            </div>
+            <div className="flex items-center">
+              <Link to="/admin/orders/create">
+                <Button className="ml-auto">
+                  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                    Buat Reservasi
+                  </span>{" "}
+                  <PlusCircle className="ml-2 w-4 h-4" />
+                </Button>
+              </Link>
             </div>
           </div>
           <Table>

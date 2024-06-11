@@ -69,12 +69,13 @@ export function Dashboard() {
    return (
      <div>Error: {errorReservasi?.message || errorAnalytics?.message}</div>
    );
+   console.log(analyticsMonthlyData)
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <NavbarAdmin />
       <div className="flex flex-col">
         <NavbarMobile />
-        <main className="flex-1 space-y-4 p-8 pt-6">
+        <main className="flex-1 p-8 pt-6 space-y-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <Card x-chunk="dashboard-01-chunk-0">
               <CardHeader className="flex flex-row justify-between items-center pb-2 space-y-0">
@@ -139,7 +140,7 @@ export function Dashboard() {
               </CardContent>
             </Card>
             <Card
-              className="lg:col-span-3 col-span-4"
+              className="col-span-4 lg:col-span-3"
               x-chunk="dashboard-01-chunk-4"
             >
               <CardHeader className="flex flex-row items-center">
